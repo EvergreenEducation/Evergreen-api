@@ -42,9 +42,7 @@ export default class ExpressServer {
 
     this.routes(app);
     auth(app);
-    const key = fs.readFileSync('./localhost-key.pem');
-    const cert = fs.readFileSync('./localhost.pem');
-    http.createServer({ key, cert }, app).listen(port, welcome(port));
+    http.createServer(app).listen(port, welcome(port));
     // oas(app, this.routes).then(() => {
     // }).catch(e => {
     //   l.error(e);
