@@ -4,6 +4,11 @@ import passport from 'passport';
 import querystring from 'querystring';
 import url from 'url';
 import session from 'express-session';
+import util from 'util';
+import UserService from '@/services/user';
+import { sequelizeInstance } from '@/models';
+
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const strategy = new Auth0Strategy(
   {
@@ -14,7 +19,7 @@ const strategy = new Auth0Strategy(
     state: true,
   },
   ((accessToken, refreshToken, extraParams, profile, done) =>
-  /**
+    /**
      * Access tokens are used to authorize users to an API
      * (resource server)
      * accessToken is the token to call the Auth0 API
@@ -22,7 +27,6 @@ const strategy = new Auth0Strategy(
      * extraParams.id_token has the JSON Web Token
      * profile has all the information from the user
      */
-
     done(null, profile)
   ),
 );
@@ -33,42 +37,58 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
+  console.log('==============', user);
   done(null, user);
 });
 
 export default app => {
   app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
+    store: new SequelizeStore({
+      db: sequelizeInstance,
+      tableName: 'sessions',
+    }),
+    secret: env.SESSION_SECRET,
+    resave: true,
     saveUninitialized: true,
-    cookie: { sameSite: false },
+    cookie: {
+      sameSite: false,
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    },
   }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.get(
     '/login',
-    passport.authenticate('auth0', { scope: 'openid email profile' }),
+    passport.authenticate('auth0', { scope: 'openid email' }),
     (req, res) => {
-      console.log('==================', req);
       res.redirect('/');
     },
   );
   // Perform the final stage of authentication and redirect to previously requested URL or '/user'
   app.get('/callback', (req, res, next) => {
-    passport.authenticate('auth0', (err, user, info) => {
-      console.log(user, info);
+    passport.authenticate('auth0', (err, user) => {
       if (err) { return next(err); }
       if (!user) { return res.redirect('/login'); }
-      req.logIn(user, err => {
-        if (err) { return next(err); }
-        const { returnTo } = req.session;
-        delete req.session.returnTo;
-        res.redirect(returnTo || '/user');
+
+      return UserService.findOrCreate(user._json).then(internalUser => {
+        req.logIn(internalUser, loginErr => {
+          if (loginErr) { return next(loginErr); }
+          const { returnTo } = req.session;
+          delete req.session.returnTo;
+          return res.redirect(returnTo || '/app');
+        });
+      }).catch(createError => {
+        console.log(req.session.returnTo);
+        if (createError.message === 'Your email has not verified.') {
+          return res.redirect('/email-not-verified');
+        }
+        return next(createError);
       });
     })(req, res, next);
   });
 
   app.get('/logout', (req, res) => {
+    req.session.destroy();
     req.logout();
 
     let returnTo = `${req.protocol}://${req.hostname}`;
@@ -78,10 +98,10 @@ export default app => {
     }
 
     const logoutURL = new url.URL(
-      util.format('https://%s/v2/logout', env.AUTH0_DOMAIN),
+      util.format('https://%s/v2/logout', env.AUTH0_BASE_URL),
     );
     const searchString = querystring.stringify({
-      client_id: process.env.AUTH0_CLIENT_ID,
+      client_id: env.AUTH0_CLIENT_ID,
       returnTo,
     });
     logoutURL.search = searchString;

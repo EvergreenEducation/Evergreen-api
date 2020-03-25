@@ -27,6 +27,9 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
+      auth0_user_id: {
+        type: Sequelize.STRING,
+      },
     });
   },
 
