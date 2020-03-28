@@ -39,9 +39,19 @@ export default (sequelize, DataTypes) => {
     is_public: {
       type: DataTypes.BOOLEAN,
     },
+  },
+  {
+    // schema: 'provider',
+    tableName: 'providers',
   });
 
-  Provider.associate = models => {};
+  Provider.associate = models => {
+    Provider.belongsToMany(models.DataFields, {
+      through: models.ProviderDataFields,
+      foreignKey: 'id',
+      otherKey: 'provider_id',
+    });
+  };
 
   return Provider;
 };
