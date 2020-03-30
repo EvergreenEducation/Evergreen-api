@@ -1,4 +1,4 @@
-const TABLE_NAME = 'provider_datafields';
+const TABLE_NAME = 'providers_datafields';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

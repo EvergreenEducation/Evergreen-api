@@ -11,7 +11,8 @@
     "test": "mocha --require @babel/register --exit",
     "test:debug": "mocha --require @babel/register --inspect-brk --exit",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "seed": "sequelize db:seed:all --url $DATABASE_URL"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

@@ -10,13 +10,12 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
   }, {
-    // schema: 'dataFields', 
     tableName: 'datafields',
   });
 
   DataFields.associate = models => {
     DataFields.belongsToMany(models.Provider, {
-      through: models.ProviderDataFields,
+      through: 'providers_datafields',
       foreignKey: 'provider_id',
       otherKey: 'id',
     });
