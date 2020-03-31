@@ -39,6 +39,9 @@ export default (sequelize, DataTypes) => {
     is_public: {
       type: DataTypes.BOOLEAN,
     },
+    financial_aid: {
+      type: DataTypes.STRING,
+    },
   }, {
     tableName: 'providers',
   });
