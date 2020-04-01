@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "chmod u+x start.sh && ./start.sh",
-    "compile": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
+    "build": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
     "dev": "nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
     "dev:debug": "nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty",
     "test": "mocha --require @babel/register --exit",
