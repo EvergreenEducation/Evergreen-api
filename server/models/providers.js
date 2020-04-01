@@ -3,9 +3,6 @@ export default (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
     },
-    type: {
-      type: DataTypes.STRING,
-    },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -16,9 +13,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     description: {
-      type: DataTypes.STRING,
-    },
-    topics: {
       type: DataTypes.STRING,
     },
     cost: {
@@ -49,8 +43,16 @@ export default (sequelize, DataTypes) => {
   Provider.associate = models => {
     Provider.belongsToMany(models.DataFields, {
       through: 'providers_datafields',
-      foreignKey: 'id',
-      otherKey: 'provider_id',
+      foreignKey: 'provider_id',
+      otherKey: 'datafield_id',
+    });
+
+    Provider.addScope('with_datafields', {
+      include: [
+        {
+          model: models.DataFields,
+        },
+      ],
     });
   };
 

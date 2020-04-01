@@ -16,8 +16,8 @@ export default (sequelize, DataTypes) => {
   DataFields.associate = models => {
     DataFields.belongsToMany(models.Provider, {
       through: 'providers_datafields',
-      foreignKey: 'provider_id',
-      otherKey: 'id',
+      foreignKey: 'datafield_id',
+      otherKey: 'provider_id',
     });
   };
 
