@@ -20,6 +20,7 @@
       "functions": false, 
       "classes": false 
     }],
+    "no-new": "off",
     "node/no-unpublished-import": ["off"],
     "arrow-parens": ["error", "as-needed", {
       "requireForBlockBody": false

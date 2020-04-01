@@ -19,7 +19,7 @@ module.exports = {
         updated_at: Sequelize.fn('NOW'),
       });
     }
-    queryInterface.bulkInsert('providers', data, {});
+    return queryInterface.bulkInsert('providers', data, {});
   },
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('providers', null, {}),
 };
