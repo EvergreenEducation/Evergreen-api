@@ -15,7 +15,7 @@ module.exports = {
           key: 'id',
         },
       },
-      data_field_id: {
+      datafield_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'datafields',

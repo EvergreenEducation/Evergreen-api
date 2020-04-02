@@ -24,6 +24,9 @@
     "node/no-unpublished-import": ["off"],
     "arrow-parens": ["error", "as-needed", {
       "requireForBlockBody": false
-    }]
+    }],
+    "no-param-reassign": "off",
+    "no-unused-vars": "off",
+    "prefer-const": "warn"
   }
 }
