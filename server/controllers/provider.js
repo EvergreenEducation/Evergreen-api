@@ -31,5 +31,30 @@ export default class Controller {
 
       return context.continue;
     });
+
+    this.providerResource.update.write_after(async (req, res, context) => {
+      let { type, topics } = req.body;
+      type = Number(type);
+
+      const datafields = compact([
+        type,
+        ...topics,
+      ]);
+
+      if (datafields.length) {
+        const datafield = await DataFields.findAll({
+          where: {
+            id: datafields,
+          },
+        });
+
+        await context.instance.setDataFields(datafield);
+        const providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
+        context.instance = providerInstance;
+      }
+
+      return context.continue;
+    });
+
   }
 }
