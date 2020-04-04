@@ -37,7 +37,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-  console.log('==============', user);
   done(null, user);
 });
 
@@ -74,13 +73,11 @@ export default app => {
         req.logIn(internalUser, loginErr => {
           if (loginErr) { return next(loginErr); }
           const { returnTo } = req.session;
-          delete req.session.returnTo;
-          return res.redirect(returnTo || '/app');
+          return res.redirect(`${env.CLIENT_APP_URL}/auth?user_id=${internalUser.id}`);
         });
       }).catch(createError => {
-        console.log(req.session.returnTo);
         if (createError.message === 'Your email has not verified.') {
-          return res.redirect('/email-not-verified');
+          return res.redirect(`${env.CLIENT_APP_URL}/auth/email_not_verified`);
         }
         return next(createError);
       });
@@ -106,6 +103,6 @@ export default app => {
     });
     logoutURL.search = searchString;
 
-    res.redirect(logoutURL);
+    res.redirect(env.CLIENT_APP_URL);
   });
 };
