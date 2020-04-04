@@ -88,11 +88,8 @@ export default app => {
     req.session.destroy();
     req.logout();
 
-    let returnTo = `${req.protocol}://${req.hostname}`;
+    const returnTo = env.CLIENT_APP_URL;
     const port = req.connection.localPort;
-    if (port !== undefined && port !== 80 && port !== 443) {
-      returnTo += `:${port}`;
-    }
 
     const logoutURL = new url.URL(
       util.format('https://%s/v2/logout', env.AUTH0_BASE_URL),
@@ -103,6 +100,6 @@ export default app => {
     });
     logoutURL.search = searchString;
 
-    res.redirect(env.CLIENT_APP_URL);
+    res.redirect(logoutURL);
   });
 };
