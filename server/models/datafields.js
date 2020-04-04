@@ -19,6 +19,12 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'datafield_id',
       otherKey: 'provider_id',
     });
+
+    DataFields.belongsToMany(models.Offers, {
+      through: 'offers_datafields',
+      foreignKey: 'datafield_id',
+      otherKey: 'offer_id',
+    });
   };
 
   return DataFields;

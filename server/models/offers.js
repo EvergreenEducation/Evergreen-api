@@ -24,9 +24,6 @@ export default (sequelize, DataTypes) => {
     prerequisites: {
       type: DataTypes.STRING,
     },
-    topics: {
-      type: DataTypes.STRING,
-    },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -66,6 +63,22 @@ export default (sequelize, DataTypes) => {
   }, {
     tableName: 'offers',
   });
+
+  Offers.associate = models => {
+    Offers.belongsToMany(models.DataFields, {
+      through: 'offers_datafields',
+      foreignKey: 'offer_id',
+      otherKey: 'datafield_id',
+    });
+
+    Offers.addScope('with_datafields', {
+      include: [
+        {
+          model: models.DataFields,
+        },
+      ],
+    });
+  };
 
   return Offers;
 };

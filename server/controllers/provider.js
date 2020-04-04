@@ -44,36 +44,6 @@ export default class Controller {
 
       newProviderType = Number(newProviderType);
 
-      const myProviderType = find(providerInstance.dataValues.DataFields, ['type', 'provider']).dataValues.id;
-
-      const myTopics = map(
-        filter(providerInstance.dataValues.DataFields, ['type', 'topic']),
-        property('dataValues.id'),
-      );
-
-      const difference = differenceWith(myTopics, newTopics);
-
-      if (isEqual(myProviderType, newProviderType) && !difference.length) {
-        context.instance = providerInstance;
-        return context.continue;
-      }
-
-      if (!isEqual(myProviderType, newProviderType) && !difference.length) {
-        const newDataField = await DataFields.findOne({ where: { id: newProviderType } });
-
-        const withoutMyProviderType = filter(
-          providerInstance.dataValues.DataFields,
-          d => (d.dataValues.id !== myProviderType),
-        );
-
-        withoutMyProviderType.push(newDataField);
-
-        await context.instance.setDataFields(withoutMyProviderType);
-        providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = providerInstance;
-        return context.continue;
-      }
-
       const datafields = compact([
         newProviderType,
         ...newTopics,
