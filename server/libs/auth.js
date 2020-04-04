@@ -8,6 +8,8 @@ import util from 'util';
 import UserService from '@/services/user';
 import { sequelizeInstance } from '@/models';
 
+console.log(env);
+
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const strategy = new Auth0Strategy(
