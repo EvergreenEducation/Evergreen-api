@@ -24,9 +24,6 @@ export default (sequelize, DataTypes) => {
     groups_of_offers: {
       type: DataTypes.STRING,
     },
-    topics: {
-      type: DataTypes.STRING,
-    },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -66,6 +63,22 @@ export default (sequelize, DataTypes) => {
   }, {
     tableName: 'pathways',
   });
+
+  Pathways.associate = models => {
+    Pathways.belongsToMany(models.DataFields, {
+      through: 'pathways_datafields',
+      foreignKey: 'pathway_id',
+      otherKey: 'datafield_id',
+    });
+
+    Pathways.addScope('with_datafields', {
+      include: [
+        {
+          model: models.DataFields,
+        },
+      ],
+    });
+  };
 
   return Pathways;
 };

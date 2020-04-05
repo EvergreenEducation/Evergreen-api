@@ -1,4 +1,4 @@
-const TABLE_NAME = 'offers';
+const TABLE_NAME = 'pathways';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

@@ -1,8 +1,5 @@
 import { Offers, DataFields } from '@/models';
-import {
-  compact, filter, find, property,
-  map, differenceWith, isEqual,
-} from 'lodash';
+import { compact } from 'lodash';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
