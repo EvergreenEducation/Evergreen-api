@@ -2,6 +2,7 @@ import {
   compact, filter, map, property,
   isEqual, differenceWith, find,
 } from 'lodash';
+import DataFieldService from '@/services/datafield';
 
 import { Provider, DataFields } from '@/models';
 
@@ -21,17 +22,7 @@ export default class Controller {
         ...topics,
       ]);
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
-        await context.instance.addDataFields(datafield);
-        const providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = providerInstance;
-      }
-
+      context.instance = await DataFieldService.addToModel(context.instance, datafields);
       return context.continue;
     });
 

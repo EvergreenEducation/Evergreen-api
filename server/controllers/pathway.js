@@ -1,5 +1,6 @@
 import { Pathways, DataFields } from '@/models';
 import { compact, filter } from 'lodash';
+import DataFieldService from '@/services/datafield';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
@@ -13,16 +14,7 @@ export default class Controller {
 
       const datafields = compact([...topics]);
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
-        await context.instance.addDataFields(datafield);
-        const pathwayInstance = await Pathways.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = pathwayInstance;
-      }
+      context.instance = await DataFieldService.addToModel(context.instance, datafields);
 
       return context.continue;
     });
@@ -42,17 +34,15 @@ export default class Controller {
         return context.continue;
       }
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
+      const datafield = await DataFields.findAll({
+        where: {
+          id: datafields,
+        },
+      });
 
-        await context.instance.setDataFields(datafield);
-        pathwayInstance = await Pathways.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = pathwayInstance;
-      }
+      await context.instance.setDataFields(datafield);
+      pathwayInstance = await Pathways.scope('with_datafields').findByPk(context.instance.id);
+      context.instance = pathwayInstance;
 
       return context.continue;
     });

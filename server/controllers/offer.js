@@ -1,5 +1,6 @@
 import { Offers, DataFields } from '@/models';
 import { compact } from 'lodash';
+import DataFieldService from '@/services/datafield';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
@@ -17,16 +18,7 @@ export default class Controller {
         ...topics,
       ]);
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
-        await context.instance.addDataFields(datafield);
-        const offerInstance = await Offers.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = offerInstance;
-      }
+      context.instance = await DataFieldService.addToModel(context.instance, datafields);
 
       return context.continue;
     });
