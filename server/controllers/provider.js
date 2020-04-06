@@ -1,4 +1,8 @@
-import { compact } from 'lodash';
+import {
+  compact, filter, map, property,
+  isEqual, differenceWith, find,
+} from 'lodash';
+import DataFieldService from '@/services/datafield';
 
 import { Provider, DataFields } from '@/models';
 
@@ -18,27 +22,22 @@ export default class Controller {
         ...topics,
       ]);
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
-        await context.instance.addDataFields(datafield);
-        const providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = providerInstance;
-      }
-
+      context.instance = await DataFieldService.addToModel(context.instance, datafields);
       return context.continue;
     });
 
     this.providerResource.update.write_after(async (req, res, context) => {
-      let { type, topics } = req.body;
-      type = Number(type);
+      let providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
+      let {
+        type: newProviderType,
+        topics: newTopics,
+      } = req.body;
+
+      newProviderType = Number(newProviderType);
 
       const datafields = compact([
-        type,
-        ...topics,
+        newProviderType,
+        ...newTopics,
       ]);
 
       if (datafields.length) {
@@ -49,12 +48,11 @@ export default class Controller {
         });
 
         await context.instance.setDataFields(datafield);
-        const providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
+        providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
         context.instance = providerInstance;
       }
 
       return context.continue;
     });
-
   }
 }
