@@ -27,7 +27,6 @@ export default class Controller {
     });
 
     this.providerResource.update.write_after(async (req, res, context) => {
-      let providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
       let {
         type: newProviderType,
         topics: newTopics,
@@ -40,17 +39,8 @@ export default class Controller {
         ...newTopics,
       ]);
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
-
-        await context.instance.setDataFields(datafield);
-        providerInstance = await Provider.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = providerInstance;
-      }
+      await context.instance.setDataFields([]);
+      context.instance = await DataFieldService.addToModel(context.instance, datafields);
 
       return context.continue;
     });

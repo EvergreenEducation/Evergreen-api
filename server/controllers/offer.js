@@ -24,7 +24,6 @@ export default class Controller {
     });
 
     this.offerResource.update.write_after(async (req, res, context) => {
-      let offerInstance = await Offers.scope('with_datafields').findByPk(context.instance.id);
       let {
         category: newCategory,
         topics: newTopics = [],
@@ -37,18 +36,8 @@ export default class Controller {
         ...newTopics,
       ]);
 
-      if (datafields.length) {
-        const datafield = await DataFields.findAll({
-          where: {
-            id: datafields,
-          },
-        });
-
-        await context.instance.setDataFields(datafield);
-        offerInstance = await Offers.scope('with_datafields').findByPk(context.instance.id);
-        context.instance = offerInstance;
-      }
-
+      await context.instance.setDataFields([]);
+      context.instance = await DataFieldService.addToModel(context.instance, datafields);
       return context.continue;
     });
   }
