@@ -8,13 +8,5 @@ export default class Controller {
       model: User,
       endpoints: [prefix, `${prefix}/:id`],
     });
-
-    const router = express.Router();
-    router.get('/:id/me', this.me);
-    app.use(prefix, router);
-  }
-
-  async me(_req, res) {
-    res.send('hello');
   }
 }
