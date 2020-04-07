@@ -77,7 +77,7 @@ export default (sequelize, DataTypes) => {
     });
 
     Pathways.belongsTo(models.Provider);
-    Pathways.belongsToMany(models.Offers, {
+    Pathways.belongsToMany(models.Offer, {
       through: 'offers_pathways',
       foreignKey: 'pathway_id',
       otherKey: 'offer_id',

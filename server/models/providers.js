@@ -55,7 +55,7 @@ export default (sequelize, DataTypes) => {
       ],
     });
 
-    Provider.hasMany(models.Offers, {
+    Provider.hasMany(models.Offer, {
       foreignKey: 'provider_id',
     });
   };

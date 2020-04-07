@@ -31,8 +31,8 @@
     "pg": "^7.18.2",
     "pino": "^5.16.0",
     "sequelize": "^5.21.5",
-    "swagger-express-middleware": "^2.0.4",
-    "sequelize-cli": "^5.5.1"
+    "sequelize-cli": "^5.5.1",
+    "swagger-express-middleware": "^2.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -45,6 +45,7 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-module-resolver": "^4.0.0",
     "chai": "^4.2.0",
+    "colors": "^1.4.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",

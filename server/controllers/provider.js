@@ -1,6 +1,5 @@
 import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
-
 import { Provider, DataFields } from '@/models';
 
 export default class Controller {

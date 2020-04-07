@@ -27,6 +27,8 @@
     }],
     "no-param-reassign": "off",
     "no-unused-vars": "off",
-    "prefer-const": "warn"
+    "prefer-const": "warn",
+    "camelcase": "warn",
+    "no-await-in-loop": "warn"
   }
 }
