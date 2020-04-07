@@ -1,7 +1,4 @@
-import {
-  compact, filter, map, property,
-  isEqual, differenceWith, find,
-} from 'lodash';
+import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 
 import { Provider, DataFields } from '@/models';

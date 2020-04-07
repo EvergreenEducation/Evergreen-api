@@ -1,5 +1,5 @@
-import { Pathways, DataFields } from '@/models';
-import { compact, filter } from 'lodash';
+import { Pathways } from '@/models';
+import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 
 export default class Controller {

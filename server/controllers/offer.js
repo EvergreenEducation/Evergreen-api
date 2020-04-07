@@ -1,4 +1,4 @@
-import { Offers, DataFields } from '@/models';
+import { Offers } from '@/models';
 import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 
