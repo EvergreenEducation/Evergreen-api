@@ -41,7 +41,7 @@ export default (sequelize, DataTypes) => {
   });
 
   Provider.associate = models => {
-    Provider.belongsToMany(models.DataFields, {
+    Provider.belongsToMany(models.DataField, {
       through: 'providers_datafields',
       foreignKey: 'provider_id',
       otherKey: 'datafield_id',
@@ -50,7 +50,7 @@ export default (sequelize, DataTypes) => {
     Provider.addScope('with_datafields', {
       include: [
         {
-          model: models.DataFields,
+          model: models.DataField,
         },
       ],
     });

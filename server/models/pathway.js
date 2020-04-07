@@ -1,12 +1,9 @@
 export default (sequelize, DataTypes) => {
-  const Offers = sequelize.define('Offers', {
+  const Pathway = sequelize.define('Pathway', {
     name: {
       type: DataTypes.STRING,
     },
-    provider_id: {
-      type: DataTypes.INTEGER,
-    },
-    category: {
+    description: {
       type: DataTypes.STRING,
     },
     start_date: {
@@ -15,31 +12,37 @@ export default (sequelize, DataTypes) => {
     keywords: {
       type: DataTypes.STRING,
     },
-    description: {
+    provider_id: {
+      type: DataTypes.INTEGER,
+    },
+    category: {
       type: DataTypes.STRING,
     },
     related_offers: {
       type: DataTypes.STRING,
     },
-    prerequisites: {
+    groups_of_offers: {
       type: DataTypes.STRING,
     },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
-    part_of_day: {
+    type: {
+      type: DataTypes.STRING,
+    },
+    earnings: {
+      type: DataTypes.STRING,
+    },
+    length: {
+      type: DataTypes.DOUBLE,
+    },
+    length_unit: {
       type: DataTypes.STRING,
     },
     frequency: {
       type: DataTypes.DOUBLE,
     },
     frequency_unit: {
-      type: DataTypes.STRING,
-    },
-    cost: {
-      type: DataTypes.DOUBLE,
-    },
-    cost_unit: {
       type: DataTypes.STRING,
     },
     credit: {
@@ -54,31 +57,30 @@ export default (sequelize, DataTypes) => {
     pay_unit: {
       type: DataTypes.STRING,
     },
-    length: {
+    outlook: {
       type: DataTypes.DOUBLE,
     },
-    length_unit: {
-      type: DataTypes.STRING,
-    },
   }, {
-    tableName: 'offers',
+    tableName: 'pathways',
   });
 
-  Offers.associate = models => {
-    Offers.belongsToMany(models.DataFields, {
-      through: 'offers_datafields',
-      foreignKey: 'offer_id',
+  Pathway.associate = models => {
+    Pathway.belongsToMany(models.DataField, {
+      through: 'pathways_datafields',
+      foreignKey: 'pathway_id',
       otherKey: 'datafield_id',
     });
 
-    Offers.addScope('with_datafields', {
+    Pathway.addScope('with_datafields', {
       include: [
         {
-          model: models.DataFields,
+          model: models.DataField,
         },
       ],
     });
+
+    Pathways.belongsTo(models.Provider);
   };
 
-  return Offers;
+  return Pathway;
 };

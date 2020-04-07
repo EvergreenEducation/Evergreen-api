@@ -11,6 +11,7 @@
   "settings": {
   },
   "rules": {
+    "camelcase": [0, {"properties": "never"}],
     "no-restricted-imports": ["off", {"path": ["@/models"]}],
     "import/no-unresolved": ["off", {"path": ["@/models"]}],
     "import/no-named-as-default": 0,

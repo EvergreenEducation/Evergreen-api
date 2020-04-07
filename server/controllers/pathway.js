@@ -1,11 +1,11 @@
-import { Pathways, DataFields } from '@/models';
+import { Pathway, DataField } from '@/models';
 import { compact, filter } from 'lodash';
 import DataFieldService from '@/services/datafield';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
     this.pathwayResource = finale.resource({
-      model: Pathways,
+      model: Pathway,
       endpoints: [prefix, `${prefix}/:id`],
     });
 

@@ -1,9 +1,9 @@
-import { DataFields } from '@/models';
+import { DataField } from '@/models';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
     this.datafieldResource = finale.resource({
-      model: DataFields,
+      model: DataField,
       endpoints: [prefix, `${prefix}/:id`],
     });
   }

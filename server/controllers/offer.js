@@ -1,11 +1,11 @@
-import { Offers, DataFields } from '@/models';
+import { Offer, DataField } from '@/models';
 import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
     this.offerResource = finale.resource({
-      model: Offers,
+      model: Offer,
       endpoints: [prefix, `${prefix}/:id`],
     });
 

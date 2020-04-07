@@ -4,6 +4,7 @@ import ProviderController from './controllers/provider';
 import DataFieldsController from './controllers/datafields';
 import OfferController from './controllers/offer';
 import PathwayController from './controllers/pathway';
+import FileController from './controllers/file';
 import * as db from './models';
 
 export default function routes(app) {
@@ -19,4 +20,5 @@ export default function routes(app) {
   new DataFieldsController({ prefix: `${APP_PATH}/datafields`, app, finale });
   new OfferController({ prefix: `${APP_PATH}/offers`, app, finale });
   new PathwayController({ prefix: `${APP_PATH}/pathways`, app, finale });
+  new FileController({ prefix: `${APP_PATH}/files`, app, finale });
 }
