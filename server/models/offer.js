@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Offers = sequelize.define('Offer', {
+  const Offer = sequelize.define('Offer', {
     name: {
       type: DataTypes.STRING,
     },
@@ -18,12 +18,12 @@ export default (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
     },
-    related_offers: {
-      type: DataTypes.STRING,
-    },
-    prerequisites: {
-      type: DataTypes.STRING,
-    },
+    // related_offers: {
+    //   type: DataTypes.STRING,
+    // },
+    // prerequisites: {
+    //   type: DataTypes.STRING,
+    // },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -64,21 +64,56 @@ export default (sequelize, DataTypes) => {
     tableName: 'offers',
   });
 
-  Offers.associate = models => {
-    Offers.belongsToMany(models.DataField, {
+  Offer.associate = models => {
+    Offer.belongsTo(models.Provider);
+    Offer.belongsToMany(models.DataField, {
       through: 'offers_datafields',
       foreignKey: 'offer_id',
       otherKey: 'datafield_id',
     });
+    Offer.belongsToMany(models.Pathway, {
+      through: 'offers_pathways',
+      foreignKey: 'offer_id',
+      otherKey: 'pathway_id',
+    });
 
-    Offers.addScope('with_datafields', {
+    Offer.addScope('with_datafields', {
       include: [
         {
-          model: models.DataFields,
+          model: models.DataField,
         },
+      ],
+    });
+
+    Offer.belongsToMany(Offer, {
+      as: {
+        singular: 'RelatedOffer',
+        plural: 'RelatedOffers',
+      },
+      through: models.OffersOffers,
+      foreignKey: 'offer_id',
+      otherKey: 'other_offer_id',
+      unique: true,
+    });
+
+    Offer.belongsToMany(Offer, {
+      as: {
+        singular: 'PrerequisiteOffers',
+        plural: 'PrerequisiteOffers',
+      },
+      through: models.OffersOffers,
+      foreignKey: 'offer_id',
+      otherKey: 'other_offer_id',
+      unique: true,
+    });
+
+    Offer.addScope('with_related_offers', {
+      as: 'LinkedOffers',
+      include: [
+        { model: models.Offer },
       ],
     });
   };
 
-  return Offers;
+  return Offer;
 };

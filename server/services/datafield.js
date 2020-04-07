@@ -8,13 +8,13 @@ class DataFieldService {
       await resourceInstance.addDataFields(datafields);
     }
 
-    // the model where the instance is created from
-    const model = resourceInstance.constructor;
-    const instance = await model.findByPk(instanceId, {
-      include: [{ model: DataField }],
-    });
-
-    return instance;
+    return {
+      includeLoadInstruction: {
+        model: DataField,
+        attributes: ['id', 'name', 'description'],
+        through: { attributes: [] },
+      },
+    };
   }
 }
 
