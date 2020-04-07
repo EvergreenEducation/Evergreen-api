@@ -78,6 +78,14 @@ export default (sequelize, DataTypes) => {
         },
       ],
     });
+
+    Offers.belongsTo(models.Provider);
+
+    Offers.belongsToMany(models.Pathways, {
+      through: 'offers_pathways',
+      foreignKey: 'offer_id',
+      otherKey: 'pathway_id',
+    });
   };
 
   return Offers;

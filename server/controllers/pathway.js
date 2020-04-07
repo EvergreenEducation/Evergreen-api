@@ -16,6 +16,14 @@ export default class Controller {
 
       context.instance = await DataFieldService.addToModel(context.instance, datafields);
 
+      // Find all the offer instances
+
+      // context.instance.addOffers(OfferInstances, { <-- gonna be in a loop
+      //  through: {
+      //   group_name: 'lorem ipsum'
+      //  },
+      // });
+
       return context.continue;
     });
 

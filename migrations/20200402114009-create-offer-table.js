@@ -13,6 +13,10 @@ module.exports = {
       },
       provider_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'providers',
+          key: 'id',
+        },
       },
       category: {
         type: Sequelize.STRING,

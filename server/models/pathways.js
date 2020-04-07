@@ -21,9 +21,6 @@ export default (sequelize, DataTypes) => {
     related_offers: {
       type: DataTypes.STRING,
     },
-    groups_of_offers: {
-      type: DataTypes.STRING,
-    },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -80,6 +77,11 @@ export default (sequelize, DataTypes) => {
     });
 
     Pathways.belongsTo(models.Provider);
+    Pathways.belongsToMany(models.Offers, {
+      through: 'offers_pathways',
+      foreignKey: 'pathway_id',
+      otherKey: 'offer_id',
+    });
   };
 
   return Pathways;
