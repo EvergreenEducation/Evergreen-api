@@ -3,14 +3,9 @@ import { DataField } from '@/models';
 class DataFieldService {
   async addToModel(resourceInstance, datafields = []) {
     const instanceId = resourceInstance.id;
-    const datafieldInstances = await DataField.findAll({
-      where: {
-        id: datafields,
-      },
-    });
 
-    if (datafieldInstances.length) {
-      await resourceInstance.addDataFields(datafieldInstances);
+    if (datafields.length) {
+      await resourceInstance.addDataFields(datafields);
     }
 
     // the model where the instance is created from
