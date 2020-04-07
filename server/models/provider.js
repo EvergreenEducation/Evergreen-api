@@ -47,6 +47,14 @@ export default (sequelize, DataTypes) => {
       otherKey: 'datafield_id',
     });
 
+    Provider.hasMany(models.File, {
+      foreignKey: 'fileable_id',
+      constraints: false,
+      scope: {
+        fileable_type: 'provider',
+      },
+    });
+
     Provider.addScope('with_datafields', {
       include: [
         {

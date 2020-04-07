@@ -40,12 +40,14 @@ export default (sequelize, DataTypes) => {
     },
   });
 
-  File.associate = models => {};
+  File.associate = models => {
+    File.belongsTo(models.Provider, { foreignKey: 'fileable_id', constraints: false });
+  };
 
   File.generatePresignedUrl = function generatePresignedUrl(name) {
     return s3.getSignedUrl('putObject', {
       Bucket: BUCKET,
-      Key: `${name}_${cuid()}`,
+      Key: `${name}`,
       Expires: signedUrlExpireSeconds,
     });
   };
