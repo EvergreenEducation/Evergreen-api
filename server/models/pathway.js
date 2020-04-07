@@ -79,7 +79,7 @@ export default (sequelize, DataTypes) => {
       ],
     });
 
-    Pathways.belongsTo(models.Provider);
+    Pathway.belongsTo(models.Provider);
   };
 
   return Pathway;
