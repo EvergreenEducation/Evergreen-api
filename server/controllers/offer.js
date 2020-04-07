@@ -46,7 +46,6 @@ export default class Controller {
             //   context.instance,
             //   {
             //     type: 'related',
-            //     relationship: 'related',
             //   },
             // );
 
@@ -55,7 +54,6 @@ export default class Controller {
               {
                 through: {
                   type: 'related',
-                  relationship: 'related',
                 },
               },
             );
