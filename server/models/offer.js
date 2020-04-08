@@ -18,12 +18,6 @@ export default (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
     },
-    // related_offers: {
-    //   type: DataTypes.STRING,
-    // },
-    // prerequisites: {
-    //   type: DataTypes.STRING,
-    // },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -108,9 +102,28 @@ export default (sequelize, DataTypes) => {
     });
 
     Offer.addScope('with_related_offers', {
-      as: 'LinkedOffers',
       include: [
-        { model: models.Offer },
+        {
+          model: Offer,
+          as: 'RelatedOffers',
+          through: {
+            attributes: [],
+            where: { type: 'related' },
+          },
+        },
+      ],
+    });
+
+    Offer.addScope('with_prerequisite_offers', {
+      include: [
+        {
+          model: Offer,
+          as: 'PrerequisiteOffers',
+          through: {
+            attributes: [],
+            where: { type: 'prerequisite' },
+          },
+        },
       ],
     });
   };
