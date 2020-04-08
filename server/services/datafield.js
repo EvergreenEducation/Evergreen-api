@@ -11,7 +11,7 @@ class DataFieldService {
     return {
       includeLoadInstruction: {
         model: DataField,
-        attributes: ['id', 'name', 'description'],
+        attributes: ['id', 'name', 'description', 'type'],
         through: { attributes: [] },
       },
     };
