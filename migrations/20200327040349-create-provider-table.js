@@ -55,6 +55,12 @@ module.exports = {
       is_public: {
         type: Sequelize.BOOLEAN,
       },
+      keywords: {
+        type: Sequelize.STRING,
+      },
+      news: {
+        type: Sequelize.STRING,
+      },
     });
   },
 
