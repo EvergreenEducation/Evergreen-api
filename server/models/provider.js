@@ -75,6 +75,14 @@ export default (sequelize, DataTypes) => {
       ],
     });
 
+    Provider.addScope('with_details', {
+      include: [
+        { model: models.Offer },
+        { model: models.DataField },
+        { model: models.File },
+      ],
+    });
+
     Provider.hasMany(models.Offer, {
       foreignKey: 'provider_id',
     });

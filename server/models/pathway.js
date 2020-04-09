@@ -1,3 +1,5 @@
+
+
 export default (sequelize, DataTypes) => {
   const Pathway = sequelize.define('Pathway', {
     name: {
@@ -77,10 +79,25 @@ export default (sequelize, DataTypes) => {
     });
 
     Pathway.belongsTo(models.Provider);
+
     Pathway.belongsToMany(models.Offer, {
-      through: 'offers_pathways',
+      as: 'GroupsOfOffers',
+      through: models.OffersPathways,
       foreignKey: 'pathway_id',
       otherKey: 'offer_id',
+    });
+
+    Pathway.addScope('with_groups_of_offers', {
+      include: [
+        {
+          attributes: ['name'],
+          model: models.Offer,
+          as: 'GroupsOfOffers',
+          through: {
+            attributes: ['group_name'],
+          },
+        },
+      ],
     });
   };
 

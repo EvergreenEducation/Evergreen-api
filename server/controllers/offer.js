@@ -1,4 +1,4 @@
-import { Offer, DataField } from '@/models';
+import { Offer, DataField, OffersOffers } from '@/models';
 import {
   compact, uniqWith, concat, map,
   keyBy,
@@ -53,10 +53,21 @@ export default class Controller {
       await context.instance.setDataFields([]);
       const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
 
-      await context.instance.setPrerequisiteOffers([]);
+      await OffersOffers.destroy({
+        where: {
+          offer_id: context.instance.id,
+          type: 'prerequisite',
+        },
+      });
+
       const { includeLoadInstruction: prereqOffersLoad } = await OfferService.connectPrereqOffers(context.instance, prerequisites);
 
-      await context.instance.setRelatedOffers([]);
+      await OffersOffers.destroy({
+        where: {
+          offer_id: context.instance.id,
+          type: 'related',
+        },
+      });
       const { includeLoadInstruction: relatedOffersLoad } = await OfferService.connectRelatedOffers(context.instance, related_offers);
 
 
