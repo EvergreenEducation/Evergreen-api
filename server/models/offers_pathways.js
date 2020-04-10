@@ -17,6 +17,9 @@ export default (sequelize, DataTypes) => {
     group_name: {
       type: DataTypes.STRING,
     },
+    group_input_name: {
+      type: DataTypes.STRING,
+    },
   }, {
     tableName: 'offers_pathways',
   });

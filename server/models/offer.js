@@ -18,12 +18,6 @@ export default (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
     },
-    // related_offers: {
-    //   type: DataTypes.STRING,
-    // },
-    // prerequisites: {
-    //   type: DataTypes.STRING,
-    // },
     learn_and_earn: {
       type: DataTypes.STRING,
     },
@@ -108,9 +102,65 @@ export default (sequelize, DataTypes) => {
     });
 
     Offer.addScope('with_related_offers', {
-      as: 'LinkedOffers',
       include: [
-        { model: models.Offer },
+        {
+          model: Offer,
+          as: 'RelatedOffers',
+          through: {
+            attributes: [],
+            where: { type: 'related' },
+          },
+        },
+      ],
+    });
+
+    Offer.addScope('with_prerequisite_offers', {
+      include: [
+        {
+          model: Offer,
+          as: 'PrerequisiteOffers',
+          through: {
+            attributes: [],
+            where: { type: 'prerequisite' },
+          },
+        },
+      ],
+    });
+
+    Offer.hasMany(models.File, {
+      foreignKey: 'fileable_id',
+      constraints: false,
+      scope: {
+        fileable_type: 'offer',
+      },
+    });
+
+    Offer.addScope('with_files', {
+      include: [
+        { model: models.File },
+      ],
+    });
+
+    Offer.addScope('with_details', {
+      include: [
+        {
+          model: Offer,
+          as: 'PrerequisiteOffers',
+          through: {
+            attributes: [],
+            where: { type: 'prerequisite' },
+          },
+        },
+        {
+          model: Offer,
+          as: 'RelatedOffers',
+          through: {
+            attributes: [],
+            where: { type: 'related' },
+          },
+        },
+        { model: models.File },
+        { model: models.DataField },
       ],
     });
   };

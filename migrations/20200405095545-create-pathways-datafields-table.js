@@ -11,7 +11,7 @@ module.exports = {
       pathway_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'offers',
+          model: 'pathways',
           key: 'id',
         },
       },

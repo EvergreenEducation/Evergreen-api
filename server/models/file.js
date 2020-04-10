@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 });
 
 const BUCKET = env.S3_BUCKET;
-const signedUrlExpireSeconds = 60 * 5;
+const signedUrlExpireSeconds = 60 * 5 * 360;
 
 export default (sequelize, DataTypes) => {
   const File = sequelize.define('File', {
@@ -38,6 +38,12 @@ export default (sequelize, DataTypes) => {
       references: { model: 'users', key: 'id' },
       allowNull: true,
     },
+    file_link: {
+      type: DataTypes.VIRTUAL,
+      get: function () {
+         return File.getUrl(this.getDataValue('location'));
+       },
+    },
   });
 
   File.associate = models => {
@@ -49,6 +55,14 @@ export default (sequelize, DataTypes) => {
       Bucket: BUCKET,
       Key: `${name}`,
       Expires: signedUrlExpireSeconds,
+    });
+  };
+
+  File.getUrl = function getUrl(location) {
+    return s3.getSignedUrl('getObject', {
+      Bucket: BUCKET,
+      Key: `${location}`,
+      Expires: 86400,
     });
   };
 

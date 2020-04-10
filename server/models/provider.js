@@ -36,6 +36,12 @@ export default (sequelize, DataTypes) => {
     financial_aid: {
       type: DataTypes.STRING,
     },
+    keywords: {
+      type: DataTypes.STRING,
+    },
+    news: {
+      type: DataTypes.STRING,
+    },
   }, {
     tableName: 'providers',
   });
@@ -60,6 +66,26 @@ export default (sequelize, DataTypes) => {
         {
           model: models.DataField,
         },
+      ],
+    });
+
+    Provider.addScope('with_offers', {
+      include: [
+        { model: models.Offer },
+      ],
+    });
+
+    Provider.addScope('with_files', {
+      include: [
+        { model: models.File },
+      ],
+    });
+
+    Provider.addScope('with_details', {
+      include: [
+        { model: models.Offer },
+        { model: models.DataField },
+        { model: models.File },
       ],
     });
 
