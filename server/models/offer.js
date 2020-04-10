@@ -126,6 +126,43 @@ export default (sequelize, DataTypes) => {
         },
       ],
     });
+
+    Offer.hasMany(models.File, {
+      foreignKey: 'fileable_id',
+      constraints: false,
+      scope: {
+        fileable_type: 'offer',
+      },
+    });
+
+    Offer.addScope('with_files', {
+      include: [
+        { model: models.File },
+      ],
+    });
+
+    Offer.addScope('with_details', {
+      include: [
+        {
+          model: Offer,
+          as: 'PrerequisiteOffers',
+          through: {
+            attributes: [],
+            where: { type: 'prerequisite' },
+          },
+        },
+        {
+          model: Offer,
+          as: 'RelatedOffers',
+          through: {
+            attributes: [],
+            where: { type: 'related' },
+          },
+        },
+        { model: models.File },
+        { model: models.DataField },
+      ],
+    });
   };
 
   return Offer;

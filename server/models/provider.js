@@ -75,6 +75,12 @@ export default (sequelize, DataTypes) => {
       ],
     });
 
+    Provider.addScope('with_files', {
+      include: [
+        { model: models.File },
+      ],
+    });
+
     Provider.addScope('with_details', {
       include: [
         { model: models.Offer },
