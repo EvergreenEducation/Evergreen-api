@@ -33,9 +33,6 @@ module.exports = {
       related_offers: {
         type: Sequelize.STRING,
       },
-      groups_of_offers: {
-        type: Sequelize.STRING,
-      },
       topics: {
         type: Sequelize.STRING,
       },

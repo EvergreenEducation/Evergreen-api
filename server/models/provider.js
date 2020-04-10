@@ -41,18 +41,30 @@ export default (sequelize, DataTypes) => {
   });
 
   Provider.associate = models => {
-    Provider.belongsToMany(models.DataFields, {
+    Provider.belongsToMany(models.DataField, {
       through: 'providers_datafields',
       foreignKey: 'provider_id',
       otherKey: 'datafield_id',
     });
 
+    Provider.hasMany(models.File, {
+      foreignKey: 'fileable_id',
+      constraints: false,
+      scope: {
+        fileable_type: 'provider',
+      },
+    });
+
     Provider.addScope('with_datafields', {
       include: [
         {
-          model: models.DataFields,
+          model: models.DataField,
         },
       ],
+    });
+
+    Provider.hasMany(models.Offer, {
+      foreignKey: 'provider_id',
     });
   };
 

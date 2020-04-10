@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const DataFields = sequelize.define('DataFields', {
+  const DataField = sequelize.define('DataField', {
     name: {
       type: DataTypes.STRING,
     },
@@ -13,25 +13,25 @@ export default (sequelize, DataTypes) => {
     tableName: 'datafields',
   });
 
-  DataFields.associate = models => {
-    DataFields.belongsToMany(models.Provider, {
+  DataField.associate = models => {
+    DataField.belongsToMany(models.Provider, {
       through: 'providers_datafields',
       foreignKey: 'datafield_id',
       otherKey: 'provider_id',
     });
 
-    DataFields.belongsToMany(models.Offers, {
+    DataField.belongsToMany(models.Offer, {
       through: 'offers_datafields',
       foreignKey: 'datafield_id',
       otherKey: 'offer_id',
     });
 
-    DataFields.belongsToMany(models.Pathways, {
+    DataField.belongsToMany(models.Pathway, {
       through: 'pathways_datafields',
       foreignKey: 'datafield_id',
       otherKey: 'pathway_id',
     });
   };
 
-  return DataFields;
+  return DataField;
 };

@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Pathways = sequelize.define('Pathways', {
+  const Pathway = sequelize.define('Pathway', {
     name: {
       type: DataTypes.STRING,
     },
@@ -19,9 +19,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     related_offers: {
-      type: DataTypes.STRING,
-    },
-    groups_of_offers: {
       type: DataTypes.STRING,
     },
     learn_and_earn: {
@@ -64,23 +61,28 @@ export default (sequelize, DataTypes) => {
     tableName: 'pathways',
   });
 
-  Pathways.associate = models => {
-    Pathways.belongsToMany(models.DataFields, {
+  Pathway.associate = models => {
+    Pathway.belongsToMany(models.DataField, {
       through: 'pathways_datafields',
       foreignKey: 'pathway_id',
       otherKey: 'datafield_id',
     });
 
-    Pathways.addScope('with_datafields', {
+    Pathway.addScope('with_datafields', {
       include: [
         {
-          model: models.DataFields,
+          model: models.DataField,
         },
       ],
     });
 
-    Pathways.belongsTo(models.Provider);
+    Pathway.belongsTo(models.Provider);
+    Pathway.belongsToMany(models.Offer, {
+      through: 'offers_pathways',
+      foreignKey: 'pathway_id',
+      otherKey: 'offer_id',
+    });
   };
 
-  return Pathways;
+  return Pathway;
 };

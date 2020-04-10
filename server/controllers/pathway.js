@@ -1,11 +1,12 @@
-import { Pathways, DataFields } from '@/models';
+import { Pathway, DataField } from '@/models';
 import { compact, filter } from 'lodash';
 import DataFieldService from '@/services/datafield';
+import SequelizeHelperService from '@/services/sequelize-helper';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
     this.pathwayResource = finale.resource({
-      model: Pathways,
+      model: Pathway,
       endpoints: [prefix, `${prefix}/:id`],
     });
 
@@ -14,7 +15,16 @@ export default class Controller {
 
       const datafields = compact([...topics]);
 
-      context.instance = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad]);
+
+      // Find all the offer instances
+
+      // context.instance.addOffers(OfferInstances, { <-- gonna be in a loop
+      //  through: {
+      //   group_name: 'lorem ipsum'
+      //  },
+      // });
 
       return context.continue;
     });
@@ -27,7 +37,8 @@ export default class Controller {
       ]);
 
       await context.instance.setDataFields([]);
-      context.instance = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad]);
 
       return context.continue;
     });
