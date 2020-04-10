@@ -1,5 +1,3 @@
-
-
 export default (sequelize, DataTypes) => {
   const Pathway = sequelize.define('Pathway', {
     name: {
@@ -97,6 +95,20 @@ export default (sequelize, DataTypes) => {
             attributes: ['group_name'],
           },
         },
+      ],
+    });
+
+    Pathway.hasMany(models.File, {
+      foreignKey: 'fileable_id',
+      constraints: false,
+      scope: {
+        fileable_type: 'pathway',
+      },
+    });
+
+    Pathway.addScope('with_files', {
+      include: [
+        { model: models.File },
       ],
     });
   };
