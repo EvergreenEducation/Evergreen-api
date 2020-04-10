@@ -1,4 +1,6 @@
 import { DataField } from '@/models';
+import * as db from '@/models';
+
 
 class DataFieldService {
   async addToModel(resourceInstance, datafields = []) {
