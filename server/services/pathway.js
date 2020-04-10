@@ -13,7 +13,6 @@ class PathwayService {
           model: Offer,
           through: {
             group_name: groupsOfOffers[i].name,
-            group_input_name: groupsOfOffers[i].inputName,
           },
         });
       }
@@ -22,7 +21,7 @@ class PathwayService {
     return {
       includeLoadInstruction: {
         model: Offer,
-        through: { attributes: ['group_name', 'group_input_name'] },
+        through: { attributes: ['group_name'] },
       },
     };
   }

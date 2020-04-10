@@ -25,9 +25,6 @@ module.exports = {
       group_name: {
         type: Sequelize.STRING,
       },
-      group_input_name: {
-        type: Sequelize.STRING,
-      },
       created_at: {
         type: Sequelize.DATE,
       },

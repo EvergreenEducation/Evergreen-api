@@ -111,6 +111,21 @@ export default (sequelize, DataTypes) => {
         { model: models.File },
       ],
     });
+
+    Pathway.addScope('with_details', {
+      include: [
+        { model: models.File },
+        { model: models.DataField },
+        {
+          attributes: ['name', 'id'],
+          model: models.Offer,
+          as: 'GroupsOfOffers',
+          through: {
+            attributes: ['group_name', 'id'],
+          },
+        },
+      ],
+    });
   };
 
   return Pathway;
