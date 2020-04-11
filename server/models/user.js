@@ -7,9 +7,13 @@ export default (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     auth0_user_id: DataTypes.STRING,
-  });
+  }, { underscored: true });
 
-  User.associate = models => {};
+  User.associate = models => {
+    User.belongsTo(models.Provider, {
+      foreignKey: 'provider_id',
+    });
+  };
 
   return User;
 };

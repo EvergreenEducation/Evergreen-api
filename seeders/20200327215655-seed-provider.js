@@ -15,6 +15,8 @@ module.exports = {
         cost: faker.random.number(),
         pay: faker.random.number(),
         credit: faker.random.number(),
+        keywords: faker.random.words(),
+        news: faker.random.words(),
         created_at: Sequelize.fn('NOW'),
         updated_at: Sequelize.fn('NOW'),
       });
