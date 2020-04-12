@@ -79,7 +79,10 @@ export default (sequelize, DataTypes) => {
     Pathway.belongsTo(models.Provider);
 
     Pathway.belongsToMany(models.Offer, {
-      as: 'GroupsOfOffers',
+      as: {
+        singular: 'GroupOfOffers',
+        plural: 'GroupsOfOffers',
+      },
       through: models.OffersPathways,
       foreignKey: 'pathway_id',
       otherKey: 'offer_id',

@@ -23,8 +23,7 @@ export default class Controller {
             break;
           }
 
-          // ! context.instance.addOffers doesn't exist right now
-          await context.instance.addOffers(groups_of_offers[i].offers, {
+          await context.instance.addGroupsOfOffers(groups_of_offers[i].offers, {
             through: {
               group_name: groups_of_offers[i].name,
             },
