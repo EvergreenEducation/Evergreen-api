@@ -1,18 +1,22 @@
-import { Offer } from '@/models';
+import { Offer, OffersPathways } from '@/models';
+import SequelizeHelperService from '@/services/sequelize-helper';
+import colors from 'colors';
 
 class PathwayService {
-  async addGroupsOfOffersToModel(resourceInstance, groupsOfOffers = []) {
+  async connectGroupsOfOffers(resourceInstance, groupsOfOffers = []) {
     const instanceId = resourceInstance.id;
 
     if (groupsOfOffers.length) {
-      for (let i = 0; i < groupsOfOffers.length; i += 1) {
-        if (!groupsOfOffers[i]) {
-          break;
-        }
-        await resourceInstance.addOffers(groupsOfOffers[i].offers, {
-          model: Offer,
-          through: {
-            group_name: groupsOfOffers[i].name,
+      for (const group of groupsOfOffers) {
+        console.log('group'.blue, group);
+        await SequelizeHelperService.syncM2M({
+          instance: resourceInstance,
+          newValues: group.offer_ids,
+          targetModel: OffersPathways,
+          foreignKey: 'pathway_id',
+          otherKey: 'offer_id',
+          extra: {
+            group_name: group.group_name,
           },
         });
       }
@@ -20,6 +24,8 @@ class PathwayService {
 
     return {
       includeLoadInstruction: {
+        as: 'GroupsOfOffers',
+        attributes: ['id', 'name'],
         model: Offer,
         through: { attributes: ['group_name'] },
       },

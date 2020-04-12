@@ -24,7 +24,12 @@ export default class Controller {
         ...topics,
       ]);
 
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'offers_datafields',
+        'offer_id',
+      );
       const { includeLoadInstruction: relatedOffersLoad } = await OfferService.addRelatedOffers(context.instance, related_offers);
       const { includeLoadInstruction: prereqOffersLoad } = await OfferService.addPrereqOffers(context.instance, prerequisites);
 
@@ -46,8 +51,12 @@ export default class Controller {
         ...newTopics,
       ]);
 
-      await context.instance.setDataFields([]);
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'offers_datafields',
+        'offer_id',
+      );
 
       const {
         includeLoadInstruction: relatedOffersLoad,

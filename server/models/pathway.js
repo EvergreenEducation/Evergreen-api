@@ -55,7 +55,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     outlook: {
-      type: DataTypes.DOUBLE,
+      type: DataTypes.STRING,
     },
   }, {
     tableName: 'pathways',
@@ -91,7 +91,7 @@ export default (sequelize, DataTypes) => {
     Pathway.addScope('with_groups_of_offers', {
       include: [
         {
-          attributes: ['name'],
+          attributes: ['name', 'id'],
           model: models.Offer,
           as: 'GroupsOfOffers',
           through: {
