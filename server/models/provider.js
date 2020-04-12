@@ -44,6 +44,7 @@ export default (sequelize, DataTypes) => {
     },
   }, {
     tableName: 'providers',
+    underscored: true,
   });
 
   Provider.associate = models => {

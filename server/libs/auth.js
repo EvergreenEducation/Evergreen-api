@@ -73,7 +73,7 @@ export default app => {
         req.logIn(internalUser, loginErr => {
           if (loginErr) { return next(loginErr); }
           const { returnTo } = req.session;
-          return res.redirect(`${env.CLIENT_APP_URL}/auth?user_id=${internalUser.id}`);
+          return res.redirect(`${env.CLIENT_APP_URL}/auth/user?user_id=${internalUser.id}`);
         });
       }).catch(createError => {
         if (createError.message === 'Your email has not verified.') {
