@@ -88,19 +88,6 @@ export default (sequelize, DataTypes) => {
       otherKey: 'offer_id',
     });
 
-    Pathway.addScope('with_groups_of_offers', {
-      include: [
-        {
-          attributes: ['name', 'id'],
-          model: models.Offer,
-          as: 'GroupsOfOffers',
-          through: {
-            attributes: ['group_name'],
-          },
-        },
-      ],
-    });
-
     Pathway.hasMany(models.File, {
       foreignKey: 'fileable_id',
       constraints: false,
@@ -119,14 +106,6 @@ export default (sequelize, DataTypes) => {
       include: [
         { model: models.File },
         { model: models.DataField },
-        {
-          attributes: ['name', 'id'],
-          model: models.Offer,
-          as: 'GroupsOfOffers',
-          through: {
-            attributes: ['group_name', 'id'],
-          },
-        },
       ],
     });
   };

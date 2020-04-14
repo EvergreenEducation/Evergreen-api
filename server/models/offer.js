@@ -65,6 +65,7 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'offer_id',
       otherKey: 'datafield_id',
     });
+
     Offer.belongsToMany(models.Pathway, {
       as: {
         singular: 'GroupOfOffers',

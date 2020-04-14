@@ -1,14 +1,18 @@
 import { Offer, OffersPathways } from '@/models';
 import SequelizeHelperService from '@/services/sequelize-helper';
-import colors from 'colors';
 
 class PathwayService {
-  async connectGroupsOfOffers(resourceInstance, groupsOfOffers = []) {
-    const instanceId = resourceInstance.id;
+  async loadOffers(pathway) {
+    return OffersPathways.findAll({
+      where: {
+        pathway_id: pathway.id,
+      },
+    });
+  }
 
+  async connectGroupsOfOffers(resourceInstance, groupsOfOffers = []) {
     if (groupsOfOffers.length) {
       for (const group of groupsOfOffers) {
-        console.log('group'.blue, group);
         await SequelizeHelperService.syncM2M({
           instance: resourceInstance,
           newValues: group.offer_ids,
