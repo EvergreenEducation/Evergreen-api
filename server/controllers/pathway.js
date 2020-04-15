@@ -70,5 +70,11 @@ export default class Controller {
 
       return context.continue;
     });
+
+    this.pathwayResource.update.send_before(async (req, res, context) => {
+      context.instance.dataValues.GroupsOfOffers = await PathwayService.loadOffers(context.instance);
+
+      return context.continue;
+    });
   }
 }
