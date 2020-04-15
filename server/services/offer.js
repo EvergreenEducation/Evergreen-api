@@ -1,53 +1,86 @@
-import { Offer } from '@/models';
-import inflection from 'inflection';
+import { Offer, OffersOffers } from '@/models';
+import SequelizeHelperService from '@/services/sequelize-helper';
 
 class OfferService {
-  async connectRelatedOffers(resourceInstance, otherOffers = []) {
-    const instanceId = resourceInstance.id;
-
+  async addToModel(resourceInstance, otherOffers, alias, type, instanceMethod) {
     if (otherOffers.length) {
-      await resourceInstance.addRelatedOffers(otherOffers, {
-        through: {
-          type: 'related',
-        },
+      await resourceInstance[instanceMethod](otherOffers, {
+        through: { type },
       });
     }
 
     return {
       includeLoadInstruction: {
         model: Offer,
-        as: 'RelatedOffers',
+        as: alias,
         attributes: ['id', 'name'],
         through: {
           attributes: [],
-          where: { type: 'related' },
+          where: { type },
         },
       },
     };
   }
 
-  async connectPrereqOffers(resourceInstance, otherOffers = []) {
-    const instanceId = resourceInstance.id;
+  async addRelatedOffers(resourceInstance, otherOffers = []) {
+    return this.addToModel(
+      resourceInstance,
+      otherOffers,
+      'RelatedOffers',
+      'related',
+      'addRelatedOffers',
+    );
+  }
 
-    if (otherOffers.length) {
-      await resourceInstance.addPrerequisiteOffers(otherOffers, {
-        through: {
-          type: 'prerequisite',
-        },
-      });
-    }
+  async addPrereqOffers(resourceInstance, otherOffers = []) {
+    return this.addToModel(
+      resourceInstance,
+      otherOffers,
+      'PrerequisiteOffers',
+      'prerequisite',
+      'addPrerequisiteOffers',
+    );
+  }
+
+  async syncToModel(resourceInstance, newValues, alias, type) {
+    await SequelizeHelperService.syncM2M({
+      instance: resourceInstance,
+      newValues,
+      targetModel: OffersOffers,
+      foreignKey: 'offer_id',
+      otherKey: 'other_offer_id',
+      extra: { type },
+    });
 
     return {
       includeLoadInstruction: {
         model: Offer,
-        as: 'PrerequisiteOffers',
+        as: alias,
         attributes: ['id', 'name'],
         through: {
           attributes: [],
-          where: { type: 'prerequisite' },
+          where: { type },
         },
       },
     };
+  }
+
+  async connectRelatedOffers(resourceInstance, newValues = []) {
+    return this.syncToModel(
+      resourceInstance,
+      newValues,
+      'RelatedOffers',
+      'related',
+    );
+  }
+
+  async connectPrereqOffers(resourceInstance, newValues = []) {
+    return this.syncToModel(
+      resourceInstance,
+      newValues,
+      'PrerequisiteOffers',
+      'prerequisite',
+    );
   }
 }
 

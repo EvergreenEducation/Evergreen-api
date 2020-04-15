@@ -1,12 +1,8 @@
-import { Offer, DataField, OffersOffers } from '@/models';
-import {
-  compact, uniqWith, concat, map,
-  keyBy,
-} from 'lodash';
+import { Offer } from '@/models';
+import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import OfferService from '@/services/offer';
 import SequelizeHelperService from '@/services/sequelize-helper';
-import colors from 'colors';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
@@ -28,9 +24,14 @@ export default class Controller {
         ...topics,
       ]);
 
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
-      const { includeLoadInstruction: relatedOffersLoad } = await OfferService.connectRelatedOffers(context.instance, related_offers);
-      const { includeLoadInstruction: prereqOffersLoad } = await OfferService.connectPrereqOffers(context.instance, prerequisites);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'offers_datafields',
+        'offer_id',
+      );
+      const { includeLoadInstruction: relatedOffersLoad } = await OfferService.addRelatedOffers(context.instance, related_offers);
+      const { includeLoadInstruction: prereqOffersLoad } = await OfferService.addPrereqOffers(context.instance, prerequisites);
 
       context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad, relatedOffersLoad, prereqOffersLoad]);
 
@@ -50,26 +51,19 @@ export default class Controller {
         ...newTopics,
       ]);
 
-      await context.instance.setDataFields([]);
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'offers_datafields',
+        'offer_id',
+      );
 
-      await OffersOffers.destroy({
-        where: {
-          offer_id: context.instance.id,
-          type: 'prerequisite',
-        },
-      });
-
-      const { includeLoadInstruction: prereqOffersLoad } = await OfferService.connectPrereqOffers(context.instance, prerequisites);
-
-      await OffersOffers.destroy({
-        where: {
-          offer_id: context.instance.id,
-          type: 'related',
-        },
-      });
-      const { includeLoadInstruction: relatedOffersLoad } = await OfferService.connectRelatedOffers(context.instance, related_offers);
-
+      const {
+        includeLoadInstruction: relatedOffersLoad,
+      } = await OfferService.connectRelatedOffers(context.instance, related_offers);
+      const {
+        includeLoadInstruction: prereqOffersLoad,
+      } = await OfferService.connectPrereqOffers(context.instance, prerequisites);
 
       context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad, relatedOffersLoad, prereqOffersLoad]);
 

@@ -65,8 +65,13 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'offer_id',
       otherKey: 'datafield_id',
     });
+
     Offer.belongsToMany(models.Pathway, {
-      through: 'offers_pathways',
+      as: {
+        singular: 'GroupOfOffers',
+        plural: 'GroupsOfOffers',
+      },
+      through: models.OffersPathways,
       foreignKey: 'offer_id',
       otherKey: 'pathway_id',
     });
@@ -92,7 +97,7 @@ export default (sequelize, DataTypes) => {
 
     Offer.belongsToMany(Offer, {
       as: {
-        singular: 'PrerequisiteOffers',
+        singular: 'PrerequisiteOffer',
         plural: 'PrerequisiteOffers',
       },
       through: models.OffersOffers,

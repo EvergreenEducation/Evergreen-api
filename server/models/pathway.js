@@ -55,7 +55,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     outlook: {
-      type: DataTypes.DOUBLE,
+      type: DataTypes.STRING,
     },
   }, {
     tableName: 'pathways',
@@ -79,23 +79,13 @@ export default (sequelize, DataTypes) => {
     Pathway.belongsTo(models.Provider);
 
     Pathway.belongsToMany(models.Offer, {
-      as: 'GroupsOfOffers',
+      as: {
+        singular: 'GroupOfOffers',
+        plural: 'GroupsOfOffers',
+      },
       through: models.OffersPathways,
       foreignKey: 'pathway_id',
       otherKey: 'offer_id',
-    });
-
-    Pathway.addScope('with_groups_of_offers', {
-      include: [
-        {
-          attributes: ['name'],
-          model: models.Offer,
-          as: 'GroupsOfOffers',
-          through: {
-            attributes: ['group_name'],
-          },
-        },
-      ],
     });
 
     Pathway.hasMany(models.File, {
@@ -109,6 +99,13 @@ export default (sequelize, DataTypes) => {
     Pathway.addScope('with_files', {
       include: [
         { model: models.File },
+      ],
+    });
+
+    Pathway.addScope('with_details', {
+      include: [
+        { model: models.File },
+        { model: models.DataField },
       ],
     });
   };

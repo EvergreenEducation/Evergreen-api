@@ -1,9 +1,8 @@
-import { Pathway, DataField, Offer, OffersPathways } from '@/models';
-import { compact, filter } from 'lodash';
+import { Pathway } from '@/models';
+import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
 import PathwayService from '@/services/pathway';
-import colors from 'colors';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
@@ -13,49 +12,67 @@ export default class Controller {
     });
 
     this.pathwayResource.create.write_after(async (req, res, context) => {
-      const { topics = [], groups_of_offers } = req.body;
-
-      console.log('groups'.white, groups_of_offers);
+      const { topics = [], groups_of_offers = [] } = req.body;
 
       const datafields = compact([...topics]);
 
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'pathways_datafields',
+        'pathway_id',
+      );
 
-      if (groups_of_offers.length) {
-        for (let i = 0; i < groups_of_offers.length; i += 1) {
-          if (!groups_of_offers[i]) {
-            break;
-          }
-          await context.instance.addOffers(groups_of_offers[i].offers, {
-            through: {
-              group_name: groups_of_offers[i].name,
-            },
-          });
+      const {
+        includeLoadInstruction: groupsLoad,
+      } = await PathwayService.connectGroupsOfOffers(context.instance, groups_of_offers);
 
-          const instructions = {
-            model: Offer,
-            through: { attributes: ['group_name'] },
-          };
+      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad, groupsLoad]);
 
-          context.instance = await SequelizeHelperService.load(context.instance, [instructions]);
-        }
+      return context.continue;
+    });
+
+    this.pathwayResource.list.send_before(async (req, res, context) => {
+      for (const pathway of context.instance) {
+        pathway.dataValues.GroupsOfOffers = await PathwayService.loadOffers(pathway);
       }
 
-      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad]);
+      return context.continue;
+    });
+
+    this.pathwayResource.read.send_before(async (req, res, context) => {
+      context.instance.dataValues.GroupsOfOffers = await PathwayService.loadOffers(context.instance);
 
       return context.continue;
     });
 
     this.pathwayResource.update.write_after(async (req, res, context) => {
-      const { topics: newTopics = [] } = req.body;
+      const { topics: newTopics = [], groups_of_offers } = req.body;
 
       const datafields = compact([
         ...newTopics,
       ]);
 
-      await context.instance.setDataFields([]);
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
-      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad]);
+      const {
+        includeLoadInstruction: groupsLoad,
+      } = await PathwayService.connectGroupsOfOffers(context.instance, groups_of_offers);
+
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'pathways_datafields',
+        'pathway_id',
+      );
+      context.instance = await SequelizeHelperService.load(context.instance, [
+        datafieldsLoad,
+        groupsLoad,
+      ]);
+
+      return context.continue;
+    });
+
+    this.pathwayResource.update.send_before(async (req, res, context) => {
+      context.instance.dataValues.GroupsOfOffers = await PathwayService.loadOffers(context.instance);
 
       return context.continue;
     });

@@ -19,7 +19,12 @@ export default class Controller {
         ...topics,
       ]);
 
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'providers_datafields',
+        'provider_id',
+      );
       context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad]);
 
       return context.continue;
@@ -38,8 +43,12 @@ export default class Controller {
         ...newTopics,
       ]);
 
-      await context.instance.setDataFields([]);
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(context.instance, datafields);
+      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+        context.instance,
+        datafields,
+        'providers_datafields',
+        'provider_id',
+      );
       context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad]);
 
 

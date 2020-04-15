@@ -70,7 +70,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       outlook: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.STRING,
       },
       created_at: {
         type: Sequelize.DATE,
