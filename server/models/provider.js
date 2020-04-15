@@ -87,11 +87,22 @@ export default (sequelize, DataTypes) => {
         { model: models.Offer },
         { model: models.DataField },
         { model: models.File },
+        { model: models.Pathway },
       ],
     });
 
     Provider.hasMany(models.Offer, {
       foreignKey: 'provider_id',
+    });
+
+    Provider.hasMany(models.Pathway, {
+      foreignKey: 'provider_id',
+    });
+
+    Provider.addScope('with_pathways', {
+      include: [
+        { model: models.Pathway },
+      ],
     });
   };
 
