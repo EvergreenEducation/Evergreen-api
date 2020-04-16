@@ -7,7 +7,7 @@ export default class Controller {
     this.userResource = finale.resource({
       model: User,
       endpoints: [prefix, `${prefix}/:id`],
-      include: [{ model: Provider, attributes: ['id', 'name', 'description'] }],
+      include: [{ model: Provider }],
     });
   }
 }

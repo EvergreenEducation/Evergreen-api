@@ -166,6 +166,13 @@ export default (sequelize, DataTypes) => {
         },
         { model: models.File },
         { model: models.DataField },
+        {
+          model: models.Pathway,
+          as: {
+            singular: 'GroupOfOffers',
+            plural: 'GroupsOfOffers',
+          },
+        },
       ],
     });
   };

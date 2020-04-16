@@ -106,6 +106,7 @@ export default (sequelize, DataTypes) => {
       include: [
         { model: models.File },
         { model: models.DataField },
+        { model: models.Provider },
       ],
     });
   };
