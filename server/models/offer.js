@@ -175,6 +175,10 @@ export default (sequelize, DataTypes) => {
         },
       ],
     });
+
+    Offer.hasMany(models.Enrollment, {
+      foreignKey: 'offer_id',
+    });
   };
 
   return Offer;
