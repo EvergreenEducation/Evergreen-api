@@ -33,7 +33,7 @@ export default class Controller {
     this.providerResource.update.write_after(async (req, res, context) => {
       let {
         type: newProviderType,
-        topics: newTopics,
+        topics: newTopics = [],
       } = req.body;
 
       newProviderType = Number(newProviderType);
