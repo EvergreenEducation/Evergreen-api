@@ -3,6 +3,7 @@ import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
 import PathwayService from '@/services/pathway';
+import colors from 'colors';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
@@ -28,6 +29,12 @@ export default class Controller {
       } = await PathwayService.connectGroupsOfOffers(context.instance, groups_of_offers);
 
       context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad, groupsLoad]);
+
+      return context.continue;
+    });
+
+    this.pathwayResource.create.send_before(async (req, res, context) => {
+      context.instance.dataValues.GroupsOfOffers = await PathwayService.loadOffers(context.instance);
 
       return context.continue;
     });
