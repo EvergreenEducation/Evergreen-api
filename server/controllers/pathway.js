@@ -3,7 +3,6 @@ import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
 import PathwayService from '@/services/pathway';
-import colors from 'colors';
 
 export default class Controller {
   constructor({ app, prefix, finale }) {
