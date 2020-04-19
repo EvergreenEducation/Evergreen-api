@@ -17,12 +17,13 @@ export default class Controller {
   }
 
   async batchCreate(req, res) {
-    const { offer_id, batch } = req.body;
+    const { offer_id, batch, provider_id } = req.body;
     const enrollments = [];
 
     for (let i = 0; i < batch; i += 1) {
       enrollments.push({
         offer_id,
+        provider_id,
         status: 'Inactivate',
         activation_code: uuidv4(),
       });

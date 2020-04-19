@@ -11,6 +11,7 @@ export default (sequelize, DataTypes) => {
 
   Enrollment.associate = models => {
     Enrollment.belongsTo(models.Offer);
+    Enrollment.belongsTo(models.Provider);
   };
 
   return Enrollment;
