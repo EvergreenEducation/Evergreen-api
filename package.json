@@ -12,7 +12,7 @@
     "test:debug": "mocha --require @babel/register --inspect-brk --exit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "seed": "sequelize db:seed:all --url $DATABASE_URL"
+    "seed": "sequelize db:seed:all --url $DATABASE_URL",
   },
   "dependencies": {
     "aws-sdk": "^2.654.0",

@@ -104,6 +104,10 @@ export default (sequelize, DataTypes) => {
         { model: models.Pathway },
       ],
     });
+
+    Provider.hasMany(models.Enrollment, {
+      foreignKey: 'provider_id',
+    });
   };
 
   return Provider;

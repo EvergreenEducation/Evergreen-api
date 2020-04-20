@@ -8,6 +8,13 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
+      provider_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'providers',
+          key: 'id',
+        },
+      },
       offer_id: {
         type: Sequelize.INTEGER,
         references: {
