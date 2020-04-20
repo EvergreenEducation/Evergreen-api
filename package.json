@@ -13,7 +13,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "seed": "sequelize db:seed:all --url $DATABASE_URL",
-    "seed-datafields": "sequelize db:seed --seed 20200419030741-seed-datafields.js"
   },
   "dependencies": {
     "aws-sdk": "^2.654.0",
