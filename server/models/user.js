@@ -13,6 +13,9 @@ export default (sequelize, DataTypes) => {
     User.belongsTo(models.Provider, {
       foreignKey: 'provider_id',
     });
+    User.belongsTo(models.Student, {
+      foreignKey: 'student_id',
+    });
   };
 
   return User;

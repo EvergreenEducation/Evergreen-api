@@ -22,9 +22,6 @@ module.exports = {
           key: 'id',
         },
       },
-      student_id: {
-        type: Sequelize.INTEGER,
-      },
       credit: {
         type: Sequelize.STRING,
       },
