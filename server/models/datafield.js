@@ -1,17 +1,21 @@
 export default (sequelize, DataTypes) => {
-  const DataField = sequelize.define('DataField', {
-    name: {
-      type: DataTypes.STRING,
+  const DataField = sequelize.define(
+    'DataField',
+    {
+      name: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
+      type: {
+        type: DataTypes.STRING,
+      },
     },
-    description: {
-      type: DataTypes.STRING,
+    {
+      tableName: 'datafields',
     },
-    type: {
-      type: DataTypes.STRING,
-    },
-  }, {
-    tableName: 'datafields',
-  });
+  );
 
   DataField.associate = models => {
     DataField.belongsToMany(models.Provider, {
@@ -30,6 +34,15 @@ export default (sequelize, DataTypes) => {
       through: 'pathways_datafields',
       foreignKey: 'datafield_id',
       otherKey: 'pathway_id',
+    });
+
+    DataField.addScope('with_offers', {
+      include: [
+        {
+          model: models.Offer,
+          attributes: ['id', 'name'],
+        },
+      ],
     });
   };
 
