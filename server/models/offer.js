@@ -150,6 +150,7 @@ export default (sequelize, DataTypes) => {
 
     Offer.addScope('with_details', {
       include: [
+        { model: models.Provider, attributes: ['id', 'name', 'location'] },
         {
           model: Offer,
           as: 'PrerequisiteOffers',

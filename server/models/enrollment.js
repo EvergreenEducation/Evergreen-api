@@ -25,17 +25,6 @@ export default (sequelize, DataTypes) => {
     Enrollment.belongsTo(models.Offer);
     Enrollment.belongsTo(models.Provider);
     Enrollment.belongsTo(models.Student);
-
-    // you can remove this, I put this on controller since
-    // enrollment can only create with an offer
-    // Enrollment.addScope('with_offers', {
-    //   include: [
-    //     {
-    //       model: models.Offer,
-    //       attributes: ['name'],
-    //     },
-    //   ],
-    // });
   };
 
   return Enrollment;
