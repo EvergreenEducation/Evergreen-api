@@ -12,8 +12,7 @@
     "test:debug": "mocha --require @babel/register --inspect-brk --exit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "seed": "chmod u+x seed.sh && ./seed.sh",
-    "heroku-postbuild": "chmod u+x seed.sh && ./seed.sh"
+    "seed": "chmod u+x seed.sh && ./seed.sh"
   },
   "dependencies": {
     "aws-sdk": "^2.654.0",
