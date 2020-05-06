@@ -1,7 +1,6 @@
 import { Enrollment, Offer } from '@/models';
 import { v4 as uuidv4 } from 'uuid';
 
-
 const express = require('express');
 
 const router = express.Router();
@@ -11,7 +10,7 @@ export default class Controller {
     this.enrollmentResource = finale.resource({
       model: Enrollment,
       endpoints: [prefix, `${prefix}/:id`],
-      include: [{ model: Offer, attributes: 'name' }],
+      include: [{ model: Offer, attributes: ['name'] }],
     });
 
     router.post('/batch_create', this.batchCreate);

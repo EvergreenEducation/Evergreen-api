@@ -1,62 +1,66 @@
 export default (sequelize, DataTypes) => {
-  const Offer = sequelize.define('Offer', {
-    name: {
-      type: DataTypes.STRING,
+  const Offer = sequelize.define(
+    'Offer',
+    {
+      name: {
+        type: DataTypes.STRING,
+      },
+      provider_id: {
+        type: DataTypes.INTEGER,
+      },
+      category: {
+        type: DataTypes.STRING,
+      },
+      start_date: {
+        type: DataTypes.DATE,
+      },
+      keywords: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
+      learn_and_earn: {
+        type: DataTypes.STRING,
+      },
+      part_of_day: {
+        type: DataTypes.STRING,
+      },
+      frequency: {
+        type: DataTypes.DOUBLE,
+      },
+      frequency_unit: {
+        type: DataTypes.STRING,
+      },
+      cost: {
+        type: DataTypes.DOUBLE,
+      },
+      cost_unit: {
+        type: DataTypes.STRING,
+      },
+      credit: {
+        type: DataTypes.DOUBLE,
+      },
+      credit_unit: {
+        type: DataTypes.STRING,
+      },
+      pay: {
+        type: DataTypes.DOUBLE,
+      },
+      pay_unit: {
+        type: DataTypes.STRING,
+      },
+      length: {
+        type: DataTypes.DOUBLE,
+      },
+      length_unit: {
+        type: DataTypes.STRING,
+      },
     },
-    provider_id: {
-      type: DataTypes.INTEGER,
+    {
+      tableName: 'offers',
     },
-    category: {
-      type: DataTypes.STRING,
-    },
-    start_date: {
-      type: DataTypes.DATE,
-    },
-    keywords: {
-      type: DataTypes.STRING,
-    },
-    description: {
-      type: DataTypes.STRING,
-    },
-    learn_and_earn: {
-      type: DataTypes.STRING,
-    },
-    part_of_day: {
-      type: DataTypes.STRING,
-    },
-    frequency: {
-      type: DataTypes.DOUBLE,
-    },
-    frequency_unit: {
-      type: DataTypes.STRING,
-    },
-    cost: {
-      type: DataTypes.DOUBLE,
-    },
-    cost_unit: {
-      type: DataTypes.STRING,
-    },
-    credit: {
-      type: DataTypes.DOUBLE,
-    },
-    credit_unit: {
-      type: DataTypes.STRING,
-    },
-    pay: {
-      type: DataTypes.DOUBLE,
-    },
-    pay_unit: {
-      type: DataTypes.STRING,
-    },
-    length: {
-      type: DataTypes.DOUBLE,
-    },
-    length_unit: {
-      type: DataTypes.STRING,
-    },
-  }, {
-    tableName: 'offers',
-  });
+  );
 
   Offer.associate = models => {
     Offer.belongsTo(models.Provider);
@@ -141,13 +145,12 @@ export default (sequelize, DataTypes) => {
     });
 
     Offer.addScope('with_files', {
-      include: [
-        { model: models.File },
-      ],
+      include: [{ model: models.File }],
     });
 
     Offer.addScope('with_details', {
       include: [
+        { model: models.Provider, attributes: ['id', 'name', 'location'] },
         {
           model: Offer,
           as: 'PrerequisiteOffers',
