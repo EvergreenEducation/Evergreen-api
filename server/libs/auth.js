@@ -75,6 +75,7 @@ export default app => {
       }
 
       const isAdmin = admins.includes(user._json.email);
+      console.log('Admin User', isAdmin);
       const adminData = isAdmin ? { role: 'admin' } : {};
 
       return UserService.findOrCreate(user._json, adminData)
