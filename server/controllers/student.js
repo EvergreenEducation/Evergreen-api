@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Student, Enrollment } from '@/models';
+import { Student, Enrollment, StudentPathway } from '@/models';
 
 const router = express.Router();
 
@@ -37,6 +37,33 @@ export default class Controller {
         });
 
         return res.status(200).send(updatedEnrollment);
+      },
+    );
+
+    router.post(
+      '/:student_id/pathways/:pathway_id/enroll',
+      async (req, res, next) => {
+        let { student_id, pathway_id } = req.params;
+        student_id = Number(student_id);
+        pathway_id = Number(pathway_id);
+
+        const studentPathway = await StudentPathway.findOne({
+          where: {
+            student_id,
+            pathway_id,
+          },
+        });
+
+        if (studentPathway) {
+          return res.status(200).send(studentPathway);
+        }
+
+        const newStudentPathway = await StudentPathway.create({
+          student_id,
+          pathway_id,
+        });
+
+        return res.status(201).send(newStudentPathway);
       },
     );
 
