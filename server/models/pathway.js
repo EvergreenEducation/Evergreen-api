@@ -92,6 +92,13 @@ export default (sequelize, DataTypes) => {
       otherKey: 'offer_id',
     });
 
+    Pathway.belongsToMany(models.Student, {
+      as: { singular: 'StudentPathway', plural: 'StudentsPathways' },
+      through: models.StudentPathway,
+      foreignKey: 'pathway_id',
+      otherKey: 'student_id',
+    });
+
     Pathway.hasMany(models.File, {
       foreignKey: 'fileable_id',
       constraints: false,
