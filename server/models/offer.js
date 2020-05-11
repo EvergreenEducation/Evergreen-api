@@ -23,6 +23,12 @@ export default (sequelize, DataTypes) => {
       learn_and_earn: {
         type: DataTypes.STRING,
       },
+      is_local_promo: {
+        type: DataTypes.BOOLEAN,
+      },
+      is_main_promo: {
+        type: DataTypes.BOOLEAN,
+      },
       part_of_day: {
         type: DataTypes.STRING,
       },
