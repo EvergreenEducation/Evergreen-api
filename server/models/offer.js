@@ -1,3 +1,5 @@
+import { Provider } from '@/models';
+
 export default (sequelize, DataTypes) => {
   const Offer = sequelize.define(
     'Offer',
@@ -25,9 +27,11 @@ export default (sequelize, DataTypes) => {
       },
       is_local_promo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       is_main_promo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       part_of_day: {
         type: DataTypes.STRING,

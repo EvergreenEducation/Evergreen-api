@@ -1,4 +1,4 @@
-import { Offer } from '@/models';
+import { Offer, Provider } from '@/models';
 import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import OfferService from '@/services/offer';
@@ -9,6 +9,7 @@ export default class Controller {
     this.offerResource = finale.resource({
       model: Offer,
       endpoints: [prefix, `${prefix}/:id`],
+      include: [{ model: Provider, attributes: ['id', 'name', 'location'] }],
     });
 
     this.offerResource.create.write_after(async (req, res, context) => {
@@ -19,21 +20,28 @@ export default class Controller {
         prerequisites = [],
       } = req.body;
 
-      const datafields = compact([
-        category,
-        ...topics,
-      ]);
+      const datafields = compact([category, ...topics]);
 
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+      const {
+        includeLoadInstruction: datafieldsLoad,
+      } = await DataFieldService.addToModel(
         context.instance,
         datafields,
         'offers_datafields',
         'offer_id',
       );
-      const { includeLoadInstruction: relatedOffersLoad } = await OfferService.addRelatedOffers(context.instance, related_offers);
-      const { includeLoadInstruction: prereqOffersLoad } = await OfferService.addPrereqOffers(context.instance, prerequisites);
+      const {
+        includeLoadInstruction: relatedOffersLoad,
+      } = await OfferService.addRelatedOffers(context.instance, related_offers);
+      const {
+        includeLoadInstruction: prereqOffersLoad,
+      } = await OfferService.addPrereqOffers(context.instance, prerequisites);
 
-      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad, relatedOffersLoad, prereqOffersLoad]);
+      context.instance = await SequelizeHelperService.load(context.instance, [
+        datafieldsLoad,
+        relatedOffersLoad,
+        prereqOffersLoad,
+      ]);
 
       return context.continue;
     });
@@ -46,12 +54,11 @@ export default class Controller {
         prerequisites = [],
       } = req.body;
 
-      const datafields = compact([
-        newCategory,
-        ...newTopics,
-      ]);
+      const datafields = compact([newCategory, ...newTopics]);
 
-      const { includeLoadInstruction: datafieldsLoad } = await DataFieldService.addToModel(
+      const {
+        includeLoadInstruction: datafieldsLoad,
+      } = await DataFieldService.addToModel(
         context.instance,
         datafields,
         'offers_datafields',
@@ -60,12 +67,22 @@ export default class Controller {
 
       const {
         includeLoadInstruction: relatedOffersLoad,
-      } = await OfferService.connectRelatedOffers(context.instance, related_offers);
+      } = await OfferService.connectRelatedOffers(
+        context.instance,
+        related_offers,
+      );
       const {
         includeLoadInstruction: prereqOffersLoad,
-      } = await OfferService.connectPrereqOffers(context.instance, prerequisites);
+      } = await OfferService.connectPrereqOffers(
+        context.instance,
+        prerequisites,
+      );
 
-      context.instance = await SequelizeHelperService.load(context.instance, [datafieldsLoad, relatedOffersLoad, prereqOffersLoad]);
+      context.instance = await SequelizeHelperService.load(context.instance, [
+        datafieldsLoad,
+        relatedOffersLoad,
+        prereqOffersLoad,
+      ]);
 
       return context.continue;
     });

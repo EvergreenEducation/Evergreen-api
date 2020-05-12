@@ -61,9 +61,11 @@ export default (sequelize, DataTypes) => {
       },
       is_local_promo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       is_main_promo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {
