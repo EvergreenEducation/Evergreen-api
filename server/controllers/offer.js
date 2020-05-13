@@ -1,4 +1,4 @@
-import { Offer, Provider } from '@/models';
+import { Offer, Provider, DataField } from '@/models';
 import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import OfferService from '@/services/offer';
@@ -9,7 +9,10 @@ export default class Controller {
     this.offerResource = finale.resource({
       model: Offer,
       endpoints: [prefix, `${prefix}/:id`],
-      include: [{ model: Provider, attributes: ['id', 'name', 'location'] }],
+      include: [
+        { model: Provider, attributes: ['id', 'name', 'location'] },
+        { model: DataField },
+      ],
     });
 
     this.offerResource.create.write_after(async (req, res, context) => {

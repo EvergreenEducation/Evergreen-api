@@ -1,4 +1,4 @@
-import { Pathway, Provider } from '@/models';
+import { Pathway, Provider, DataField } from '@/models';
 import { compact } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
@@ -9,7 +9,10 @@ export default class Controller {
     this.pathwayResource = finale.resource({
       model: Pathway,
       endpoints: [prefix, `${prefix}/:id`],
-      include: [{ model: Provider, attributes: ['id', 'name', 'location'] }],
+      include: [
+        { model: Provider, attributes: ['id', 'name', 'location'] },
+        { model: DataField },
+      ],
     });
 
     this.pathwayResource.create.write_after(async (req, res, context) => {
