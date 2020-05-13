@@ -11,32 +11,59 @@ export default class Controller {
     });
 
     router.put(
-      '/:student_id/offers/:offer_id/enroll',
+      '/:student_id/offers/:offer_id/provider/:provider_id/enroll',
       async (req, res, next) => {
-        let { student_id, offer_id } = req.params;
+        let { student_id, offer_id, provider_id } = req.params;
         student_id = Number(student_id);
         offer_id = Number(offer_id);
+        provider_id = Number(provider_id);
+
+        const defaultParams = {
+          student_id,
+          offer_id,
+          provider_id,
+        };
 
         const enrollmentResource = await Enrollment.findOne({
           where: {
+            ...defaultParams,
             student_id: null,
-            offer_id,
-            status: 'Inactivate',
           },
         });
 
         if (!enrollmentResource) {
-          return res.status(400).send({
-            message: 'There are no activatable enrollments available.',
+          const createdEnrollment = await Enrollment.create({
+            offer_id,
+            student_id,
+            provider_id,
+            status: 'Inactivate',
           });
+          return res.status(201).send(createdEnrollment);
         }
 
-        const updatedEnrollment = await enrollmentResource.update({
-          student_id,
-          status: 'Activated',
-        });
+        if (
+          enrollmentResource &&
+          enrollmentResource.dataValues.student_id &&
+          enrollmentResource.dataValues.status === 'Inactivate'
+        ) {
+          const updatedEnrollment = enrollmentResource.update({
+            status: 'Activated',
+          });
+          return res.status(200).send(updatedEnrollment);
+        }
 
-        return res.status(200).send(updatedEnrollment);
+        if (
+          enrollmentResource &&
+          enrollmentResource.dataValues.status === 'Inactivate'
+        ) {
+          const updatedEnrollment = enrollmentResource.update({
+            student_id,
+            status: 'Activated',
+          });
+          return res.status(200).send(updatedEnrollment);
+        }
+
+        return res.status(200).send(enrollmentResource);
       },
     );
 
