@@ -59,6 +59,14 @@ export default (sequelize, DataTypes) => {
       outlook: {
         type: DataTypes.STRING,
       },
+      is_local_promo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      is_main_promo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       tableName: 'pathways',

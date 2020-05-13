@@ -1,51 +1,63 @@
 export default (sequelize, DataTypes) => {
-  const Provider = sequelize.define('Provider', {
-    name: {
-      type: DataTypes.STRING,
+  const Provider = sequelize.define(
+    'Provider',
+    {
+      name: {
+        type: DataTypes.STRING,
+      },
+      learn_and_earn: {
+        type: DataTypes.STRING,
+      },
+      industry: {
+        type: DataTypes.STRING,
+      },
+      location: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
+      cost: {
+        type: DataTypes.DOUBLE,
+      },
+      pay: {
+        type: DataTypes.DOUBLE,
+      },
+      credit: {
+        type: DataTypes.DOUBLE,
+      },
+      contact: {
+        type: DataTypes.JSON,
+      },
+      logo: {
+        type: DataTypes.STRING,
+      },
+      is_public: {
+        type: DataTypes.BOOLEAN,
+      },
+      financial_aid: {
+        type: DataTypes.STRING,
+      },
+      keywords: {
+        type: DataTypes.STRING,
+      },
+      news: {
+        type: DataTypes.STRING,
+      },
+      is_local_promo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      is_main_promo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
-    learn_and_earn: {
-      type: DataTypes.STRING,
+    {
+      tableName: 'providers',
+      underscored: true,
     },
-    industry: {
-      type: DataTypes.STRING,
-    },
-    location: {
-      type: DataTypes.STRING,
-    },
-    description: {
-      type: DataTypes.STRING,
-    },
-    cost: {
-      type: DataTypes.DOUBLE,
-    },
-    pay: {
-      type: DataTypes.DOUBLE,
-    },
-    credit: {
-      type: DataTypes.DOUBLE,
-    },
-    contact: {
-      type: DataTypes.JSON,
-    },
-    logo: {
-      type: DataTypes.STRING,
-    },
-    is_public: {
-      type: DataTypes.BOOLEAN,
-    },
-    financial_aid: {
-      type: DataTypes.STRING,
-    },
-    keywords: {
-      type: DataTypes.STRING,
-    },
-    news: {
-      type: DataTypes.STRING,
-    },
-  }, {
-    tableName: 'providers',
-    underscored: true,
-  });
+  );
 
   Provider.associate = models => {
     Provider.belongsToMany(models.DataField, {
@@ -71,15 +83,11 @@ export default (sequelize, DataTypes) => {
     });
 
     Provider.addScope('with_offers', {
-      include: [
-        { model: models.Offer },
-      ],
+      include: [{ model: models.Offer }],
     });
 
     Provider.addScope('with_files', {
-      include: [
-        { model: models.File },
-      ],
+      include: [{ model: models.File }],
     });
 
     Provider.addScope('with_details', {
@@ -100,9 +108,7 @@ export default (sequelize, DataTypes) => {
     });
 
     Provider.addScope('with_pathways', {
-      include: [
-        { model: models.Pathway },
-      ],
+      include: [{ model: models.Pathway }],
     });
 
     Provider.hasMany(models.Enrollment, {
