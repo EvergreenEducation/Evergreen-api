@@ -67,6 +67,14 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      local_promoted_by_user_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      main_promoted_by_user_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
     },
     {
       tableName: 'pathways',
@@ -124,6 +132,10 @@ export default (sequelize, DataTypes) => {
         { model: models.File },
         { model: models.DataField },
         { model: models.Provider },
+        {
+          model: models.Student,
+          as: 'StudentsPathways',
+        },
       ],
     });
   };
