@@ -16,6 +16,9 @@ export default (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      notes: {
+        type: DataTypes.STRING,
+      },
     },
     {
       tableName: 'students_pathways',

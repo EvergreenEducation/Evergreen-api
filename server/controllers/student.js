@@ -1,5 +1,13 @@
 import * as express from 'express';
-import { Student, Enrollment, StudentPathway } from '@/models';
+import {
+  Student,
+  Enrollment,
+  StudentPathway,
+  Pathway,
+  File,
+  DataField,
+  Provider,
+} from '@/models';
 
 const router = express.Router();
 
@@ -93,6 +101,37 @@ export default class Controller {
         return res.status(201).send(newStudentPathway);
       },
     );
+
+    router.put('/:student_id/pathways/:pathway_id', async (req, res, next) => {
+      let { student_id, pathway_id } = req.params;
+      student_id = Number(student_id);
+      pathway_id = Number(pathway_id);
+
+      const { notes } = req.body;
+
+      const studentPathway = await StudentPathway.findOne({
+        where: {
+          student_id,
+          pathway_id,
+        },
+      });
+
+      studentPathway.notes = notes;
+      await studentPathway.save();
+      const pathway = await Pathway.findByPk(studentPathway.pathway_id, {
+        include: [
+          { model: File },
+          { model: DataField },
+          { model: Provider },
+          {
+            model: Student,
+            as: 'StudentsPathways',
+          },
+        ],
+      });
+
+      return res.status(200).send(pathway);
+    });
 
     app.use(prefix, router);
   }

@@ -124,6 +124,10 @@ export default (sequelize, DataTypes) => {
         { model: models.File },
         { model: models.DataField },
         { model: models.Provider },
+        {
+          model: models.Student,
+          as: 'StudentsPathways',
+        },
       ],
     });
   };
