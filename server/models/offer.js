@@ -66,6 +66,14 @@ export default (sequelize, DataTypes) => {
       length_unit: {
         type: DataTypes.STRING,
       },
+      local_promoted_by_user_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      main_promoted_by_user_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
     },
     {
       tableName: 'offers',
