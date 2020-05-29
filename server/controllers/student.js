@@ -7,6 +7,7 @@ import {
   File,
   DataField,
   Provider,
+  Offer,
 } from '@/models';
 
 const router = express.Router();
@@ -126,6 +127,10 @@ export default class Controller {
           {
             model: Student,
             as: 'StudentsPathways',
+          },
+          {
+            model: Offer,
+            as: 'GroupsOfOffers',
           },
         ],
       });

@@ -140,6 +140,10 @@ export default (sequelize, DataTypes) => {
           model: models.Student,
           as: 'StudentsPathways',
         },
+        {
+          model: models.Offer,
+          as: 'GroupsOfOffers',
+        },
       ],
     });
   };
