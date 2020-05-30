@@ -15,6 +15,9 @@ export default (sequelize, DataTypes) => {
       //    processing: when provider grading
       //    approved: when provider approve the final grade/certificate
       // }
+      start_date: {
+        type: DataTypes.DATE,
+      },
     },
     {
       tableName: 'enrollments',

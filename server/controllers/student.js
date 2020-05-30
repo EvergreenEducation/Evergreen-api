@@ -23,6 +23,7 @@ export default class Controller {
       '/:student_id/offers/:offer_id/provider/:provider_id/enroll',
       async (req, res, next) => {
         let { student_id, offer_id, provider_id } = req.params;
+        const { start_date } = req.body;
         student_id = Number(student_id);
         offer_id = Number(offer_id);
         provider_id = Number(provider_id);
@@ -46,6 +47,7 @@ export default class Controller {
             student_id,
             provider_id,
             status: 'Inactivate',
+            start_date,
           });
           return res.status(201).send(createdEnrollment);
         }
