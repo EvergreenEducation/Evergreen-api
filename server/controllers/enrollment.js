@@ -18,7 +18,7 @@ export default class Controller {
   }
 
   async batchCreate(req, res) {
-    const { offer_id, batch, provider_id } = req.body;
+    const { offer_id, batch, provider_id, start_date } = req.body;
     const enrollments = [];
 
     for (let i = 0; i < batch; i += 1) {
@@ -27,13 +27,12 @@ export default class Controller {
         provider_id,
         status: 'Inactivate',
         activation_code: uuidv4(),
+        start_date,
       });
     }
 
     await Enrollment.bulkCreate(enrollments);
 
-    return res.status(201).json({
-      message: 'created',
-    });
+    return res.status(201).send(enrollments);
   }
 }
