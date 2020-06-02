@@ -2,7 +2,7 @@ import { Offer, OffersPathways } from '@/models';
 import SequelizeHelperService from '@/services/sequelize-helper';
 
 class PathwayService {
-  async loadOffers(pathway) {
+  async loadOffersPathways(pathway) {
     return OffersPathways.findAll({
       where: {
         pathway_id: pathway.id,
