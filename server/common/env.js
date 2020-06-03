@@ -6,4 +6,6 @@ export default {
   DATABASE_URL: process.env.DATABASE_URL,
   BASE_URL: process.env.BASE_URL,
   AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL,
+  S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+  S3_SECRET_ACCESS: process.env.S3_SECRET_ACCESS,
 };
