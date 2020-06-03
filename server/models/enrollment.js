@@ -30,5 +30,14 @@ export default (sequelize, DataTypes) => {
     Enrollment.belongsTo(models.Student);
   };
 
+  Enrollment.STATUSES = [
+    'Inactivate',
+    'Activated',
+    'Completed',
+    'Approved',
+    'Failed',
+    'Unenrolled',
+  ];
+
   return Enrollment;
 };

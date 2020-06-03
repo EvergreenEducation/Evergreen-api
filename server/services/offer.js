@@ -1,4 +1,4 @@
-import { Offer, OffersOffers } from '@/models';
+import { Offer, OffersOffers, Enrollment } from '@/models';
 import SequelizeHelperService from '@/services/sequelize-helper';
 
 class OfferService {
@@ -81,6 +81,21 @@ class OfferService {
       'PrerequisiteOffers',
       'prerequisite',
     );
+  }
+
+  async checkStudentEnrollStatus(student_id, offer_id) {
+    const enrollment = await Enrollment.findOne({
+      where: {
+        student_id,
+        offer_id,
+      },
+    });
+
+    if (enrollment) {
+      return enrollment.status;
+    }
+
+    return 'Unenrolled';
   }
 }
 
