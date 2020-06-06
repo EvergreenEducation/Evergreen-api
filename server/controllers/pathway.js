@@ -130,14 +130,16 @@ export default class Controller {
       offersPathways = offersPathways.filter(v => v.group_name === group_name);
     }
 
-    const semesters = uniq(map(offersPathways, 'semester'));
+    const semesters = uniq(
+      map(offersPathways, op => `${op.semester}-${op.year}`),
+    );
 
     const statuses = [];
 
-    for (const op of offersPathways) {
+    for (const _op of offersPathways) {
       let status = await OfferService.checkStudentEnrollStatus(
         student_id,
-        op.offer_id,
+        _op.offer_id,
       );
 
       // Treating approved and completed as the same thing
@@ -147,7 +149,8 @@ export default class Controller {
 
       statuses.push({
         status,
-        semester: op.semester,
+        semester: _op.semester,
+        year: _op.year,
       });
     }
 
@@ -183,8 +186,14 @@ export default class Controller {
 
       const data = [];
 
-      for (const semester of semesters) {
-        const checkStatus = filter(statuses, { semester, status });
+      for (const entry of semesters) {
+        let [semester, year] = entry.split('-');
+        year = Number(year);
+        const checkStatus = filter(statuses, {
+          semester,
+          status,
+          year,
+        });
         data.push(checkStatus.length);
       }
 

@@ -22,6 +22,9 @@ export default (sequelize, DataTypes) => {
       semester: {
         type: DataTypes.STRING,
       },
+      year: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       tableName: 'offers_pathways',
