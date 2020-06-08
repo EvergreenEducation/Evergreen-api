@@ -38,6 +38,7 @@
     "prefer-const": "warn",
     "no-await-in-loop": "off",
     "max-len": ["error", { "code": 150 }],
-    "operator-linebreak": "warn"
+    "operator-linebreak": "warn",
+    "no-continue": "warn"
   }
 }

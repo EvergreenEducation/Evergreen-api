@@ -18,7 +18,7 @@ class PathwayService {
         };
 
         if (group.semester) {
-          extra = { ...extra, semester: group.semester };
+          extra = { ...extra, semester: group.semester, year: group.year };
         }
 
         await SequelizeHelperService.syncM2M({
