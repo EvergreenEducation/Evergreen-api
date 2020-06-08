@@ -12,13 +12,24 @@ class PathwayService {
 
   async connectGroupsOfOffers(resourceInstance, groupsOfOffers = []) {
     if (groupsOfOffers.length) {
+      await OffersPathways.destroy({
+        force: true,
+        where: {
+          pathway_id: resourceInstance.id,
+        },
+      });
+
       for (const group of groupsOfOffers) {
         let extra = {
           group_name: group.group_name,
         };
 
         if (group.semester) {
-          extra = { ...extra, semester: group.semester, year: group.year };
+          extra = { ...extra, semester: group.semester };
+        }
+
+        if (group.year) {
+          extra = { ...extra, year: group.year };
         }
 
         await SequelizeHelperService.syncM2M({

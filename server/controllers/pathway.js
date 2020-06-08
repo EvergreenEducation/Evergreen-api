@@ -1,5 +1,5 @@
 import { Pathway, Provider, DataField, Enrollment } from '@/models';
-import { compact, map, uniq, filter } from 'lodash';
+import { compact, filter } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
 import PathwayService from '@/services/pathway';
@@ -130,16 +130,14 @@ export default class Controller {
       offersPathways = offersPathways.filter(v => v.group_name === group_name);
     }
 
-    const semesters = uniq(
-      map(offersPathways, op => `${op.semester}-${op.year}`),
-    );
-
     const statuses = [];
+    const semesterSet = new Set();
 
     for (const _op of offersPathways) {
-      let status = await OfferService.checkStudentEnrollStatus(
+      let { status, year } = await OfferService.checkStudentEnrollStatus(
         student_id,
         _op.offer_id,
+        _op.year,
       );
 
       // Treating approved and completed as the same thing
@@ -150,8 +148,10 @@ export default class Controller {
       statuses.push({
         status,
         semester: _op.semester,
-        year: _op.year,
+        year,
       });
+
+      semesterSet.add(`${_op.semester}-${year}`);
     }
 
     const { STATUSES } = Enrollment;
@@ -173,6 +173,12 @@ export default class Controller {
       Unenrolled: 'Unenrolled',
       Failed: 'Failed',
     };
+
+    const semesters = Array.from(semesterSet).sort((a, b) => {
+      const [semesterA, yearA] = a.split('-');
+      const [semesterB, yearB] = b.split('-');
+      return yearA - yearB;
+    });
 
     for (const status of STATUSES) {
       if (status === 'Inactivate' || status === 'Approved') {

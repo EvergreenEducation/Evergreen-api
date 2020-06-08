@@ -39,6 +39,7 @@
     "no-await-in-loop": "off",
     "max-len": ["error", { "code": 150 }],
     "operator-linebreak": "warn",
-    "no-continue": "warn"
+    "no-continue": "warn",
+    "new-cap": "warn"
   }
 }
