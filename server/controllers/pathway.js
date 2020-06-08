@@ -1,5 +1,5 @@
 import { Pathway, Provider, DataField, Enrollment } from '@/models';
-import { compact, map, uniq, filter } from 'lodash';
+import { compact, filter } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
 import PathwayService from '@/services/pathway';
@@ -174,7 +174,11 @@ export default class Controller {
       Failed: 'Failed',
     };
 
-    const semesters = Array.from(semesterSet);
+    const semesters = Array.from(semesterSet).sort((a, b) => {
+      const [semesterA, yearA] = a.split('-');
+      const [semesterB, yearB] = b.split('-');
+      return yearA - yearB;
+    });
 
     for (const status of STATUSES) {
       if (status === 'Inactivate' || status === 'Approved') {

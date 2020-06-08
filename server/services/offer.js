@@ -95,12 +95,13 @@ class OfferService {
 
     let status = enrollment ? enrollment.status : 'Unenrolled';
     let enrollYear = enrollment
-      ? new moment(enrollment.createdAt).year()
+      ? new moment(enrollment.start_date || enrollment.createdAt).year() +
+        derived_year
       : new moment().year();
 
     return {
       status,
-      year: enrollYear + derived_year,
+      year: enrollYear,
     };
   }
 }
