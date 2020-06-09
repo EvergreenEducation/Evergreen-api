@@ -1,4 +1,6 @@
-import { Pathway, Provider, DataField, Enrollment } from '@/models';
+import {
+  Pathway, Provider, DataField, Enrollment,
+} from '@/models';
 import { compact, filter } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
@@ -159,6 +161,7 @@ export default class Controller {
     const datasets = [];
 
     const backgroundColors = {
+      Inactivate: 'rbg(128,0,128)',
       Activated: 'rgb(0,0,255)',
       Completed: 'rgb(0,255,0)',
       Approved: 'rgb(0,255,0)',
@@ -167,9 +170,10 @@ export default class Controller {
     };
 
     const inAppLabels = {
+      Inactivate: 'Applied',
       Activated: 'Enrolled',
       Completed: 'Passed',
-      Approved: 'Passed',
+      Approved: 'Approved',
       Unenrolled: 'Unenrolled',
       Failed: 'Failed',
     };
