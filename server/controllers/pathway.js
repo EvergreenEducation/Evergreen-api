@@ -136,16 +136,11 @@ export default class Controller {
     const semesterSet = new Set();
 
     for (const _op of offersPathways) {
-      let { status, year } = await OfferService.checkStudentEnrollStatus(
+      const { status, year } = await OfferService.checkStudentEnrollStatus(
         student_id,
         _op.offer_id,
         _op.year,
       );
-
-      // Treating approved and completed as the same thing
-      if (status === 'Approved') {
-        status = 'Completed';
-      }
 
       statuses.push({
         status,
@@ -161,10 +156,10 @@ export default class Controller {
     const datasets = [];
 
     const backgroundColors = {
-      Inactivate: 'rbg(128,0,128)',
+      Inactivate: 'rgb(148,0,211)',
       Activated: 'rgb(0,0,255)',
       Completed: 'rgb(0,255,0)',
-      Approved: 'rgb(0,255,0)',
+      Approved: 'rgb(0,0,255)',
       Unenrolled: 'rgba(255,255,0,0.2)',
       Failed: 'rgb(255,99,132)',
     };
@@ -173,7 +168,7 @@ export default class Controller {
       Inactivate: 'Applied',
       Activated: 'Enrolled',
       Completed: 'Passed',
-      Approved: 'Approved',
+      Approved: 'Enrolled',
       Unenrolled: 'Unenrolled',
       Failed: 'Failed',
     };
@@ -185,10 +180,6 @@ export default class Controller {
     });
 
     for (const status of STATUSES) {
-      if (status === 'Inactivate' || status === 'Approved') {
-        continue;
-      }
-
       const statusObj = {
         label: inAppLabels[status],
         backgroundColor: backgroundColors[status],

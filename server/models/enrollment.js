@@ -32,7 +32,6 @@ export default (sequelize, DataTypes) => {
 
   Enrollment.STATUSES = [
     'Inactivate',
-    'Activated',
     'Completed',
     'Approved',
     'Failed',
