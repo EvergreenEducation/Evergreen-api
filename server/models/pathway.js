@@ -79,6 +79,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
       },
+      external_url: {
+        type: DataTypes.STRING,
+      },
     },
     {
       tableName: 'pathways',
