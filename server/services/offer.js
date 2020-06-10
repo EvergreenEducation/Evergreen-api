@@ -93,11 +93,10 @@ class OfferService {
       },
     });
 
-    let status = enrollment ? enrollment.status : 'Unenrolled';
-    let enrollYear = enrollment
-      ? new moment(enrollment.start_date || enrollment.createdAt).year() +
-        derived_year
-      : new moment().year();
+    const status = enrollment ? enrollment.status : 'Unenrolled';
+    const enrollYear = enrollment
+      ? new moment(enrollment.start_date || enrollment.createdAt).year()
+      : new moment().year() + derived_year - 1;
 
     return {
       status,

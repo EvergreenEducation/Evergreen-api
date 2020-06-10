@@ -122,15 +122,11 @@ export default class Controller {
   }
 
   async generateUserPathwayChartData(req, res) {
-    const { student_id, pathway_id, group_name } = req.body;
+    const { student_id, pathway_id } = req.body;
 
     const pathway = await Pathway.findByPk(pathway_id);
 
-    let offersPathways = await PathwayService.loadOffersPathways(pathway);
-
-    if (group_name) {
-      offersPathways = offersPathways.filter(v => v.group_name === group_name);
-    }
+    const offersPathways = await PathwayService.loadOffersPathways(pathway);
 
     const statuses = [];
     const semesterSet = new Set();
