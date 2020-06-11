@@ -85,7 +85,7 @@ class OfferService {
     );
   }
 
-  async checkStudentEnrollStatus(student_id, offer_id, derived_year = 0) {
+  async checkStudentEnrollStatus(student_id, offer_id) {
     const enrollment = await Enrollment.findOne({
       where: {
         student_id,
@@ -93,15 +93,10 @@ class OfferService {
       },
     });
 
-    let status = enrollment ? enrollment.status : 'Unenrolled';
-    let enrollYear = enrollment
-      ? new moment(enrollment.start_date || enrollment.createdAt).year() +
-        derived_year
-      : new moment().year();
+    const status = enrollment ? enrollment.status : 'Unenrolled';
 
     return {
       status,
-      year: enrollYear,
     };
   }
 }
