@@ -74,6 +74,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         defaultValue: [],
       },
+      external_url: {
+        type: DataTypes.STRING,
+      },
     },
     {
       tableName: 'offers',
