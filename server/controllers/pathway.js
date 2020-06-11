@@ -1,11 +1,15 @@
 import {
   Pathway, Provider, DataField, Enrollment,
 } from '@/models';
-import { compact, filter } from 'lodash';
+import { compact, filter, map } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
 import PathwayService from '@/services/pathway';
 import OfferService from '@/services/offer';
+import Sequelize from 'sequelize';
+import moment from 'moment';
+
+const { Op } = Sequelize;
 
 const express = require('express');
 
@@ -122,21 +126,26 @@ export default class Controller {
   }
 
   async generateUserPathwayChartData(req, res) {
-    const { student_id, pathway_id } = req.body;
+    const { student_id, pathway_id, group_name } = req.body;
 
     const pathway = await Pathway.findByPk(pathway_id);
 
-    const offersPathways = await PathwayService.loadOffersPathways(pathway);
+    let offersPathways = await PathwayService.loadOffersPathways(pathway);
+
+    if (group_name) {
+      offersPathways = offersPathways.filter(v => v.group_name === group_name);
+    }
 
     const statuses = [];
     const semesterSet = new Set();
 
     for (const _op of offersPathways) {
-      const { status, year } = await OfferService.checkStudentEnrollStatus(
+      const { status } = await OfferService.checkStudentEnrollStatus(
         student_id,
         _op.offer_id,
-        _op.year,
       );
+
+      const year = new moment().year() + _op.year - 1;
 
       statuses.push({
         status,
@@ -145,6 +154,43 @@ export default class Controller {
       });
 
       semesterSet.add(`${_op.semester}-${year}`);
+    }
+
+    const offersInPathway = map(offersPathways, 'offer_id');
+
+    // these are the enrollment of offers that is not in the pathway
+    const standAloneEnrollments = await Enrollment.findAll({
+      where: {
+        student_id,
+        offer_id: {
+          [Op.notIn]: offersInPathway,
+        },
+      },
+    });
+
+    for (const enr of standAloneEnrollments) {
+      const { status } = enr;
+      const year = new moment(enr.start_date || enr.createdAt).year();
+      const month = new moment(enr.start_date || enr.createdAt).month();
+
+      let semester = null;
+      if (month >= 1 && month < 4) {
+        semester = 'spring';
+      } else if (month >= 4 && month < 8) {
+        semester = 'summer';
+      } else if (month >= 8 && month < 10) {
+        semester = 'fall';
+      } else {
+        semester = 'winter';
+      }
+
+      statuses.push({
+        status,
+        semester,
+        year,
+      });
+
+      semesterSet.add(`${semester}-${year}`);
     }
 
     const { STATUSES } = Enrollment;
