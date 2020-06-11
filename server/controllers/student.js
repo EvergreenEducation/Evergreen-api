@@ -26,13 +26,23 @@ export default class Controller {
         const { start_date } = req.body;
         student_id = Number(student_id);
         offer_id = Number(offer_id);
-        provider_id = Number(provider_id);
 
-        const defaultParams = {
+        if (provider_id) {
+          provider_id = Number(provider_id);
+        }
+
+        let defaultParams = {
           student_id,
           offer_id,
           provider_id,
         };
+
+        if (!provider_id) {
+          defaultParams = {
+            student_id,
+            offer_id,
+          };
+        }
 
         const enrollmentResource = await Enrollment.findOne({
           where: {
@@ -43,10 +53,8 @@ export default class Controller {
 
         if (!enrollmentResource) {
           const createdEnrollment = await Enrollment.create({
-            offer_id,
-            student_id,
-            provider_id,
-            status: 'Inactivate',
+            ...defaultParams,
+            status: 'Activated',
             start_date,
           });
           return res.status(201).send(createdEnrollment);
