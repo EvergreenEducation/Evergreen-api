@@ -138,6 +138,14 @@ export default class Controller {
 
     const statuses = [];
     const semesterSet = new Set();
+    const currentYear = new moment().year();
+
+    for (let i = 0; i < 4; i += 1) {
+      semesterSet.add(`fall-${currentYear + i + 1}`);
+      semesterSet.add(`winter-${currentYear + i + 1}`);
+      semesterSet.add(`spring-${currentYear + i + 1}`);
+      semesterSet.add(`summer-${currentYear + i + 1}`);
+    }
 
     for (const _op of offersPathways) {
       const { status } = await OfferService.checkStudentEnrollStatus(
