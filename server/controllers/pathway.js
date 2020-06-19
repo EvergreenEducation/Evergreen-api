@@ -140,20 +140,18 @@ export default class Controller {
     const semesterSet = new Set();
     const currentYear = new moment().year();
 
-    for (let i = 0; i < 4; i += 1) {
-      semesterSet.add(`fall-${currentYear + i + 1}`);
-      semesterSet.add(`winter-${currentYear + i + 1}`);
-      semesterSet.add(`spring-${currentYear + i + 1}`);
-      semesterSet.add(`summer-${currentYear + i + 1}`);
-    }
-
+    let maxYear = 4;
     for (const _op of offersPathways) {
       const { status } = await OfferService.checkStudentEnrollStatus(
         student_id,
         _op.offer_id,
       );
 
-      const year = new moment().year() + _op.year - 1;
+      const year = currentYear + _op.year - 1;
+
+      if (_op.year && _op.year > maxYear) {
+        maxYear = _op.year;
+      }
 
       statuses.push({
         status,
@@ -162,6 +160,13 @@ export default class Controller {
       });
 
       semesterSet.add(`${_op.semester}-${year}`);
+    }
+
+    for (let i = 0; i < maxYear; i += 1) {
+      semesterSet.add(`fall-${currentYear + i + 1}`);
+      semesterSet.add(`winter-${currentYear + i + 1}`);
+      semesterSet.add(`spring-${currentYear + i + 1}`);
+      semesterSet.add(`summer-${currentYear + i + 1}`);
     }
 
     const offersInPathway = map(offersPathways, 'offer_id');
