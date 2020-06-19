@@ -162,11 +162,11 @@ export default class Controller {
       semesterSet.add(`${_op.semester}-${year}`);
     }
 
-    for (let i = 0; i < maxYear; i += 1) {
-      semesterSet.add(`fall-${currentYear + i + 1}`);
-      semesterSet.add(`winter-${currentYear + i + 1}`);
-      semesterSet.add(`spring-${currentYear + i + 1}`);
-      semesterSet.add(`summer-${currentYear + i + 1}`);
+    for (let i = 0; i <= maxYear; i += 1) {
+      semesterSet.add(`fall-${currentYear + i}`);
+      semesterSet.add(`winter-${currentYear + i}`);
+      semesterSet.add(`spring-${currentYear + i}`);
+      semesterSet.add(`summer-${currentYear + i}`);
     }
 
     const offersInPathway = map(offersPathways, 'offer_id');
@@ -259,7 +259,7 @@ export default class Controller {
 
     const labels = semesters.map(s => {
       const [sem, year] = s.split('-');
-      return `${sem.charAt(0)}-${year.slice(-2)}`;
+      return `${sem.substring(0, 2)}-${year.slice(-2)}`;
     });
 
     return res.status(200).send({ labels, datasets });
