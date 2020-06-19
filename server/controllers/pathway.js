@@ -257,6 +257,11 @@ export default class Controller {
       datasets.push(statusObj);
     }
 
-    return res.status(200).send({ labels: semesters, datasets });
+    const labels = semesters.map(s => {
+      const [sem, year] = s.split('-');
+      return `${sem.charAt(0)}-${year.slice(-2)}`;
+    });
+
+    return res.status(200).send({ labels, datasets });
   }
 }
