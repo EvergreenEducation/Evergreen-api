@@ -1,6 +1,4 @@
-import {
-  Pathway, Provider, DataField, Enrollment,
-} from '@/models';
+import { Pathway, Provider, DataField, Enrollment, Offer } from '@/models';
 import { compact, filter, map } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
@@ -136,6 +134,11 @@ export default class Controller {
       offersPathways = offersPathways.filter(v => v.group_name === group_name);
     }
 
+    for (let k = 0; k < offersPathways.length; k += 1) {
+      const offer = await Offer.findByPk(offersPathways[k].offer_id);
+      offersPathways[k].offer = offer;
+    }
+
     const statuses = [];
     const semesterSet = new Set();
     const currentYear = new moment().year();
@@ -157,6 +160,7 @@ export default class Controller {
         status,
         semester: _op.semester,
         year,
+        offer_name: _op.offer.name,
       });
 
       semesterSet.add(`${_op.semester}-${year}`);
@@ -234,6 +238,8 @@ export default class Controller {
       return yearA - yearB;
     });
 
+    let dataLookUp = {};
+
     for (const status of STATUSES) {
       const statusObj = {
         label: inAppLabels[status],
@@ -242,7 +248,8 @@ export default class Controller {
 
       const data = [];
 
-      for (const entry of semesters) {
+      for (let i = 0; i < semesters.length; i += 1) {
+        let entry = semesters[i];
         let [semester, year] = entry.split('-');
         year = Number(year);
         const checkStatus = filter(statuses, {
@@ -250,6 +257,12 @@ export default class Controller {
           status,
           year,
         });
+        if (checkStatus.length) {
+          const key = `${semester.substring(0, 2)}-${year
+            .toString()
+            .slice(-2)}-${inAppLabels[status]}`;
+          dataLookUp[key] = map(checkStatus, 'offer_name');
+        }
         data.push(checkStatus.length);
       }
 
@@ -262,6 +275,6 @@ export default class Controller {
       return `${sem.substring(0, 2)}-${year.slice(-2)}`;
     });
 
-    return res.status(200).send({ labels, datasets });
+    return res.status(200).send({ labels, datasets, dataLookUp });
   }
 }
