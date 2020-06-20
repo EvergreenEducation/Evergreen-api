@@ -190,6 +190,8 @@ export default class Controller {
       const year = new moment(enr.start_date || enr.createdAt).year();
       const month = new moment(enr.start_date || enr.createdAt).month();
 
+      const offer = await Offer.findByPk(enr.offer_id);
+
       let semester = null;
       if (month >= 1 && month < 4) {
         semester = 'spring';
@@ -203,6 +205,7 @@ export default class Controller {
 
       statuses.push({
         status,
+        offer_name: offer.name,
         semester,
         year,
       });
@@ -244,6 +247,8 @@ export default class Controller {
       const statusObj = {
         label: inAppLabels[status],
         backgroundColor: backgroundColors[status],
+        barPercentage: 0.6,
+        categoryPerentage: 0.6,
       };
 
       const data = [];
