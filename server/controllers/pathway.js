@@ -264,11 +264,16 @@ export default class Controller {
           status,
           year,
         });
+
         if (checkStatus.length) {
           const key = `${semester.substring(0, 2)}-${year
             .toString()
             .slice(-2)}-${inAppLabels[status]}`;
-          dataLookUp[key] = map(checkStatus, 'offer_name');
+
+          if (!dataLookUp[key]) {
+            dataLookUp[key] = [];
+          }
+          dataLookUp[key].push(...map(checkStatus, 'offer_name'));
         }
         data.push(checkStatus.length);
       }
