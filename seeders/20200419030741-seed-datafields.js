@@ -2,37 +2,62 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     const data = [
       {
-        name: 'International',
-        description: 'International provider',
+        name: 'Online',
+        description: null,
         type: 'provider',
       },
       {
-        name: 'Finance & Business',
-        description: 'This is a generic offer',
-        type: 'offer_category',
-      },
-      {
-        name: 'Science Offers',
-        description: 'Offers about science',
-        type: 'offer_category',
-      },
-      {
-        name: 'Web Development',
-        description: 'Offers about web development',
-        type: 'offer_category',
-      },
-      {
-        name: 'hrs/day',
+        name: 'Community College',
         description: null,
-        type: 'frequency_unit',
+        type: 'provider',
       },
       {
-        name: 'hrs/wk',
+        name: 'Charter School',
         description: null,
-        type: 'frequency_unit',
+        type: 'provider',
       },
       {
-        name: 'days/m',
+        name: 'High School',
+        description: null,
+        type: 'provider',
+      },
+      {
+        name: 'University',
+        description: null,
+        type: 'provider',
+      },
+      {
+        name: 'Private Employer',
+        description: null,
+        type: 'provider',
+      },
+      {
+        name: 'Military',
+        description: null,
+        type: 'provider',
+      },
+      {
+        name: 'Government',
+        description: null,
+        type: 'provider',
+      },
+      {
+        name: 'Space Exploration',
+        description: null,
+        type: 'offer_category',
+      },
+      {
+        name: 'History',
+        description: null,
+        type: 'offer_category',
+      },
+      {
+        name: 'Natural Science',
+        description: null,
+        type: 'offer_category',
+      },
+      {
+        name: 'Days/week',
         description: null,
         type: 'frequency_unit',
       },
@@ -52,77 +77,17 @@ module.exports = {
         type: 'part_of_day_unit',
       },
       {
-        name: 'Weekly',
+        name: 'Per Semester',
         description: null,
         type: 'credit_unit',
       },
       {
-        name: 'Biweekly',
-        description: null,
-        type: 'credit_unit',
-      },
-      {
-        name: 'Monthly',
-        description: null,
-        type: 'credit_unit',
-      },
-      {
-        name: 'Every Quarter',
-        description: null,
-        type: 'credit_unit',
-      },
-      {
-        name: 'Biannual',
-        description: null,
-        type: 'credit_unit',
-      },
-      {
-        name: 'Weekly',
+        name: 'Dollars',
         description: null,
         type: 'payment_unit',
       },
       {
-        name: 'Biweekly',
-        description: null,
-        type: 'payment_unit',
-      },
-      {
-        name: 'Monthly',
-        description: null,
-        type: 'payment_unit',
-      },
-      {
-        name: 'Every Quarter',
-        description: null,
-        type: 'payment_unit',
-      },
-      {
-        name: 'Biannual',
-        description: null,
-        type: 'payment_unit',
-      },
-      {
-        name: 'weeks',
-        description: null,
-        type: 'length_unit',
-      },
-      {
-        name: 'biweek',
-        description: null,
-        type: 'length_unit',
-      },
-      {
-        name: 'months',
-        description: null,
-        type: 'length_unit',
-      },
-      {
-        name: 'quarters',
-        description: null,
-        type: 'length_unit',
-      },
-      {
-        name: 'semesters',
+        name: 'Semesters',
         description: null,
         type: 'length_unit',
       },
@@ -132,53 +97,69 @@ module.exports = {
         type: 'cost_unit',
       },
       {
-        name: 'Month',
+        name: 'Astrophysics',
         description: null,
-        type: 'cost_unit',
-      },
-      {
-        name: 'Computer Science',
-        description: 'Computer Science',
         type: 'topic',
       },
       {
-        name: 'Finance',
-        description: 'Finance Topic',
+        name: 'Astrobiology',
+        description: null,
         type: 'topic',
       },
       {
-        name: 'Education',
-        description: 'Topic description',
+        name: 'Aerospace Engineering',
+        description: null,
         type: 'topic',
       },
       {
-        name: 'Biology',
-        description: 'Biology',
+        name: 'Computer Networks',
+        description: null,
         type: 'topic',
       },
       {
-        name: 'AI',
-        description: 'AI',
+        name: 'Software Engineering',
+        description: null,
         type: 'topic',
       },
       {
-        name: 'Economics',
-        description: 'Economics',
+        name: 'Habitat Construction',
+        description: null,
         type: 'topic',
       },
       {
-        name: 'Hardware',
-        description: 'Hardware',
+        name: 'Plumbing',
+        description: null,
         type: 'topic',
       },
       {
-        name: 'Physics',
-        description: 'Physics',
+        name: 'Electrical Contracting',
+        description: null,
+        type: 'topic',
+      },
+      {
+        name: 'Space Exploration',
+        description: null,
+        type: 'topic',
+      },
+      {
+        name: 'Ancient History',
+        description: null,
+        type: 'topic',
+      },
+      {
+        name: 'Geology',
+        description: null,
+        type: 'topic',
+      },
+      {
+        name: 'Ecology',
+        description: null,
         type: 'topic',
       },
     ];
 
     return queryInterface.bulkInsert('datafields', data, {});
   },
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('datafields', null, {}),
+  down: (queryInterface, Sequelize) =>
+    queryInterface.bulkDelete('datafields', null, {}),
 };
