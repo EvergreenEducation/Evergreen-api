@@ -44,6 +44,14 @@ export default class Controller {
           };
         }
 
+        const existingEnrollment = await Enrollment.findOne({
+          where: defaultParams,
+        });
+
+        if (existingEnrollment) {
+          return res.status(200).send('Student already enrolled');
+        }
+
         const enrollmentResource = await Enrollment.findOne({
           where: {
             ...defaultParams,
