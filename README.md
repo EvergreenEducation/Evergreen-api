@@ -101,4 +101,8 @@ Fix all airbnb linter errors
 npm run lint
 ```
 
-   
+## Library
+- Sequelize: ORM database model
+- Express: Http Server
+- S3 : Static Files
+- Passport: Authentication and Auth0
