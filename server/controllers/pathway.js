@@ -1,4 +1,6 @@
-import { Pathway, Provider, DataField, Enrollment, Offer } from '@/models';
+import {
+  Pathway, Provider, DataField, Enrollment, Offer,
+} from '@/models';
 import { compact, filter, map } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
@@ -241,7 +243,7 @@ export default class Controller {
       return yearA - yearB;
     });
 
-    let dataLookUp = {};
+    const dataLookUp = {};
 
     for (const status of STATUSES) {
       const statusObj = {
@@ -254,7 +256,7 @@ export default class Controller {
       const data = [];
 
       for (let i = 0; i < semesters.length; i += 1) {
-        let entry = semesters[i];
+        const entry = semesters[i];
         let [semester, year] = entry.split('-');
         year = Number(year);
         const checkStatus = filter(statuses, {
@@ -280,6 +282,8 @@ export default class Controller {
       return `${sem.substring(0, 2)}-${year.slice(-2)}`;
     });
 
-    return res.status(200).send({ labels, datasets, dataLookUp });
+    return res.status(200).send({
+      labels, datasets, dataLookUp, statuses,
+    });
   }
 }
