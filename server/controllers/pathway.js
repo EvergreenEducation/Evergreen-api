@@ -147,7 +147,7 @@ export default class Controller {
 
     let maxYear = 4;
     for (const _op of offersPathways) {
-      const { status } = await OfferService.checkStudentEnrollStatus(
+      let { status } = await OfferService.checkStudentEnrollStatus(
         student_id,
         _op.offer_id,
       );
@@ -156,6 +156,10 @@ export default class Controller {
 
       if (_op.year && _op.year > maxYear) {
         maxYear = _op.year;
+      }
+
+      if (status === 'Activated') {
+        status = 'Approved';
       }
 
       statuses.push({
@@ -188,7 +192,7 @@ export default class Controller {
     });
 
     for (const enr of standAloneEnrollments) {
-      const { status } = enr;
+      let { status } = enr;
       const year = new moment(enr.start_date || enr.createdAt).year();
       const month = new moment(enr.start_date || enr.createdAt).month();
 
@@ -203,6 +207,10 @@ export default class Controller {
         semester = 'fall';
       } else {
         semester = 'winter';
+      }
+
+      if (status === 'Activated') {
+        status = 'Approved';
       }
 
       statuses.push({
