@@ -1,0 +1,45 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb-base",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": false
+  },
+  "env": {
+    "mocha": true
+  },
+  "settings": {},
+  "rules": {
+    "camelcase": [0, { "properties": "never" }],
+    "no-restricted-imports": ["off", { "path": ["@/models"] }],
+    "import/no-unresolved": ["off", { "path": ["@/models"] }],
+    "import/no-named-as-default": 0,
+    "no-underscore-dangle": 0,
+    "class-methods-use-this": ["off"],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": false
+      }
+    ],
+    "no-new": "off",
+    "node/no-unpublished-import": ["off"],
+    "arrow-parens": [
+      "error",
+      "as-needed",
+      {
+        "requireForBlockBody": false
+      }
+    ],
+    "no-param-reassign": "off",
+    "no-unused-vars": "off",
+    "no-restricted-syntax": 0,
+    "prefer-const": "warn",
+    "no-await-in-loop": "off",
+    "max-len": ["error", { "code": 150 }],
+    "operator-linebreak": "warn",
+    "no-continue": "warn",
+    "new-cap": "warn"
+  }
+}
