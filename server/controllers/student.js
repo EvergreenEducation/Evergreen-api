@@ -52,45 +52,12 @@ export default class Controller {
           return res.status(200).send('Student already enrolled');
         }
 
-        const enrollmentResource = await Enrollment.findOne({
-          where: {
-            ...defaultParams,
-            student_id: null,
-          },
+        const createdEnrollment = await Enrollment.create({
+          ...defaultParams,
+          status: 'Inactivate',
+          start_date,
         });
-
-        if (!enrollmentResource) {
-          const createdEnrollment = await Enrollment.create({
-            ...defaultParams,
-            status: 'Activated',
-            start_date,
-          });
-          return res.status(201).send(createdEnrollment);
-        }
-
-        if (
-          enrollmentResource &&
-          enrollmentResource.dataValues.student_id &&
-          enrollmentResource.dataValues.status === 'Inactivate'
-        ) {
-          const updatedEnrollment = enrollmentResource.update({
-            status: 'Activated',
-          });
-          return res.status(200).send(updatedEnrollment);
-        }
-
-        if (
-          enrollmentResource &&
-          enrollmentResource.dataValues.status === 'Inactivate'
-        ) {
-          const updatedEnrollment = enrollmentResource.update({
-            student_id,
-            status: 'Activated',
-          });
-          return res.status(200).send(updatedEnrollment);
-        }
-
-        return res.status(200).send(enrollmentResource);
+        return res.status(201).send(createdEnrollment);
       },
     );
 
