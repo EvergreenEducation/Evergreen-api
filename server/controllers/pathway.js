@@ -1,4 +1,6 @@
-import { Pathway, Provider, DataField, Enrollment, Offer } from '@/models';
+import {
+  Pathway, Provider, DataField, Enrollment, Offer,
+} from '@/models';
 import { compact, filter, map } from 'lodash';
 import DataFieldService from '@/services/datafield';
 import SequelizeHelperService from '@/services/sequelize-helper';
@@ -145,7 +147,7 @@ export default class Controller {
 
     let maxYear = 4;
     for (const _op of offersPathways) {
-      const { status } = await OfferService.checkStudentEnrollStatus(
+      let { status } = await OfferService.checkStudentEnrollStatus(
         student_id,
         _op.offer_id,
       );
@@ -154,6 +156,10 @@ export default class Controller {
 
       if (_op.year && _op.year > maxYear) {
         maxYear = _op.year;
+      }
+
+      if (status === 'Activated') {
+        status = 'Approved';
       }
 
       statuses.push({
@@ -186,7 +192,7 @@ export default class Controller {
     });
 
     for (const enr of standAloneEnrollments) {
-      const { status } = enr;
+      let { status } = enr;
       const year = new moment(enr.start_date || enr.createdAt).year();
       const month = new moment(enr.start_date || enr.createdAt).month();
 
@@ -201,6 +207,10 @@ export default class Controller {
         semester = 'fall';
       } else {
         semester = 'winter';
+      }
+
+      if (status === 'Activated') {
+        status = 'Approved';
       }
 
       statuses.push({
@@ -241,7 +251,7 @@ export default class Controller {
       return yearA - yearB;
     });
 
-    let dataLookUp = {};
+    const dataLookUp = {};
 
     for (const status of STATUSES) {
       const statusObj = {
@@ -254,7 +264,7 @@ export default class Controller {
       const data = [];
 
       for (let i = 0; i < semesters.length; i += 1) {
-        let entry = semesters[i];
+        const entry = semesters[i];
         let [semester, year] = entry.split('-');
         year = Number(year);
         const checkStatus = filter(statuses, {
@@ -262,11 +272,16 @@ export default class Controller {
           status,
           year,
         });
+
         if (checkStatus.length) {
           const key = `${semester.substring(0, 2)}-${year
             .toString()
             .slice(-2)}-${inAppLabels[status]}`;
-          dataLookUp[key] = map(checkStatus, 'offer_name');
+
+          if (!dataLookUp[key]) {
+            dataLookUp[key] = [];
+          }
+          dataLookUp[key].push(...map(checkStatus, 'offer_name'));
         }
         data.push(checkStatus.length);
       }
@@ -280,6 +295,8 @@ export default class Controller {
       return `${sem.substring(0, 2)}-${year.slice(-2)}`;
     });
 
-    return res.status(200).send({ labels, datasets, dataLookUp });
+    return res.status(200).send({
+      labels, datasets, dataLookUp, statuses,
+    });
   }
 }
