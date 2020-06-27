@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-export default {
+const config = {
   ...dotenv.config().parsed,
   CLIENT_APP_URL: process.env.CLIENT_APP_URL,
   DATABASE_URL: process.env.DATABASE_URL,
@@ -18,3 +18,7 @@ export default {
   S3_BUCKET: process.env.S3_BUCKET,
   S3_REGION: process.env.S3_REGION,
 };
+
+console.log(config);
+
+export default config;
