@@ -17,7 +17,7 @@ export default (sequelize, DataTypes) => {
         },
       },
       notes: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
     },
     {
