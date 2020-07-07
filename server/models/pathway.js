@@ -6,7 +6,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       start_date: {
         type: DataTypes.DATE,

@@ -20,7 +20,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       learn_and_earn: {
         type: DataTypes.STRING,
