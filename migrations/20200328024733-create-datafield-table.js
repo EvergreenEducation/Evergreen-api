@@ -14,6 +14,14 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
+      page_url_check: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
+      },
+      page_id: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
       type: {
         type: Sequelize.STRING,
       },

@@ -40,12 +40,6 @@ module.exports = {
       cost: {
         type: Sequelize.DOUBLE,
       },
-      pay: {
-        type: Sequelize.DOUBLE,
-      },
-      credit: {
-        type: Sequelize.DOUBLE,
-      },
       contact: {
         type: Sequelize.JSON,
       },
