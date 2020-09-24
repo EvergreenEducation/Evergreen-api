@@ -8,9 +8,22 @@ export default (sequelize, DataTypes) => {
       description: {
         type: DataTypes.TEXT,
       },
+<<<<<<< HEAD
       type: {
         type: DataTypes.STRING,
       },
+=======
+      industry: {
+        type: DataTypes.STRING,
+      },
+      type: {
+        type: DataTypes.STRING,
+      },
+      is_check_topic: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      }
+>>>>>>> initial
     },
     {
       tableName: 'datafields',
