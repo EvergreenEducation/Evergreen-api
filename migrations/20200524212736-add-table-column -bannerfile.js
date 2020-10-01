@@ -6,12 +6,18 @@ module.exports = {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            image_url:{
+            image_url: {
                 type: Sequelize.STRING,
             },
             landing_image: {
                 type: Sequelize.ARRAY(Sequelize.STRING),
                 defaultValue: [],
+            },
+            page_url_check: {
+                type: Sequelize.STRING,
+            },
+            page_id: {
+                type: Sequelize.INTEGER
             },
             user_role: {
                 type: Sequelize.STRING,

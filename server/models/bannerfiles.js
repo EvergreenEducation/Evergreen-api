@@ -15,6 +15,12 @@ export default (sequelize, DataTypes) => {
             user_id: {
                 type: DataTypes.INTEGER,
             },
+            page_url_check:{
+                type: DataTypes.STRING,
+            },
+            page_id: {
+                type: DataTypes.INTEGER
+            }
         },
         {
             tableName: 'bannerfiles',

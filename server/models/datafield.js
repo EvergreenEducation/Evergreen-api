@@ -8,11 +8,6 @@ export default (sequelize, DataTypes) => {
       description: {
         type: DataTypes.TEXT,
       },
-<<<<<<< HEAD
-      type: {
-        type: DataTypes.STRING,
-      },
-=======
       industry: {
         type: DataTypes.STRING,
       },
@@ -22,8 +17,15 @@ export default (sequelize, DataTypes) => {
       is_check_topic: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      }
->>>>>>> initial
+      },
+      page_url_check: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      page_id: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
     },
     {
       tableName: 'datafields',

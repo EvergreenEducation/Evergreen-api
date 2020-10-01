@@ -1,14 +1,5 @@
 node_modules
 dist
-<<<<<<< HEAD
-.DS_Store
-=======
-<<<<<<< Updated upstream
-.DS_Store
-.env
-config
-model/index
-=======
  .env               
  .envrc             
  .gitignore         
@@ -39,5 +30,3 @@ node_modules
 # misc
 .DS_Store
 .env
->>>>>>> Stashed changes
->>>>>>> initial

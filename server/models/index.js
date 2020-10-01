@@ -22,7 +22,11 @@ const sequelizeOptions = {
   dialect: 'postgres',
 };
 
-const sequelize = new Sequelize(env.DATABASE_URL, sequelizeOptions);
+// res.header('Access-Control-Allow-Origin', '*');
+// res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+// res.header('Access-Control-Allow-Headers', 'Content-Type');
+console.log("------------db------------")
+const sequelize = new Sequelize('postgres://localhost:5432/api_template', sequelizeOptions);
 const db = {};
 
 fs
