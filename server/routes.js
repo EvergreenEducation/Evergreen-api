@@ -7,10 +7,12 @@ import PathwayController from './controllers/pathway';
 import FileController from './controllers/file';
 import EnrollmetnController from './controllers/enrollment';
 import StudentController from './controllers/student';
+var cors = require('cors');
 import * as db from './models';
 
 export default function routes(app) {
-  finale.initialize({
+  app.use(cors({ origin: "*" }));
+    finale.initialize({
     app,
     sequelize: db.sequelizeInstance,
   });

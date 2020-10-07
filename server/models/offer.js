@@ -51,6 +51,10 @@ export default (sequelize, DataTypes) => {
       credit: {
         type: DataTypes.DOUBLE,
       },
+      location_type:{
+        type: DataTypes.STRING,
+        defaultValue: "",
+      },
       credit_unit: {
         type: DataTypes.STRING,
       },
@@ -65,6 +69,39 @@ export default (sequelize, DataTypes) => {
       },
       length_unit: {
         type: DataTypes.STRING,
+      },
+      rubric_attachment: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      main_image: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      banner_image: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      is_generic : {
+        type: DataTypes.BOOLEAN
+      },
+      is_display : {
+        type: DataTypes.BOOLEAN
+      },
+      generic_type : {
+        type : DataTypes.STRING,
+      },
+      custom_page_promo_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      custom_page_local_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      custom_page_promo_routes: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       local_promoted_by_user_ids: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),

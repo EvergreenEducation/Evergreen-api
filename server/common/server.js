@@ -36,8 +36,8 @@ export default class ExpressServer {
 
   listen(port = process.env.PORT) {
     const welcome = p => () => l.info(
-      `up and running in ${process.env.NODE_ENV
-          || 'development'} @: ${os.hostname()} on port: ${p}}`,
+      `up and running in ${
+        'development'} @: ${os.hostname()} on port: ${p}}`,
     );
 
     this.routes(app);

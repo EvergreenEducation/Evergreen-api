@@ -1,8 +1,0 @@
-PATH_add node_modules/.bin/
-PATH_add app/node_modules/.bin/
-
-export PORT=8888
-export DATABASE_URL=postgres://localhost:5432/api_template
-export REDIS_URL=redis://localhost:6379
-export BASE_URL=https://d56eb374.ngrok.io
-
