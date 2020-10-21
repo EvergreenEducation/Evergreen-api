@@ -1,32 +1,4 @@
 node_modules
 dist
- .env               
- .envrc             
- .gitignore         
- config/config.json 
- config_backup/config.json
- server/libs/auth.js      
- server/libs/db.js        
- server/models/index.js    
-admin.json
-server/controllers/file.js
-server/models/index.js
-config
-./server/libs/auth.js
 .DS_Store
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env

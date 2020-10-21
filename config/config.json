@@ -1,10 +1,7 @@
 {
   "development": {
-    "database": "api_template",
-    "host": "127.0.0.1",
+    "database": "d7nlrtgk2t8sc3",
+    "host": "ec2-18-210-180-94.compute-1.amazonaws.com",
     "dialect": "postgres",
-    "port": "5432",
-    "user":"devnineteen",
-    "password":"devnineteen"
   }
 }

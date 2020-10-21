@@ -84,13 +84,13 @@ export default app => {
               return next(loginErr);
             }
             const { returnTo } = req.session;
-            return res.redirect(`http://localhost:3000/auth/user?user_id=${internalUser.id}`);
-          });
+            return res.redirect(`${env.CLIENT_APP_URL}/auth/user?user_id=${internalUser.id}`);
+	  });
         })
         .catch(createError => {
           if (createError.message === 'Your email has not verified.') {
-            return res.redirect(`http://localhost:3000/auth/email_not_verified`);
-          }
+            return res.redirect(`${env.CLIENT_APP_URL}/auth/email_not_verified`);
+	  }
           return next(createError);
         });
     })(req, res, next);
