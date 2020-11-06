@@ -7,16 +7,19 @@ const aws = require('aws-sdk');
 const s3Storage = require('multer-sharp-s3');
 const express = require('express');
 const router = express.Router();
-
+console.log("=======",process.env.S3_REGION)
+// console.log("last",process.env.S3_ACCESS_KEY,process.env.S3_SECRET_ACCESS, process.env.S3_BUCKET)
 aws.config.update({
   accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_ACCESS
+  secretAccessKey: process.env.S3_SECRET_ACCESS,
+  region: process.env.S3_REGION
 })
 const s3 = new aws.S3()
 const Storage = s3Storage({
   s3,
   Bucket: process.env.S3_BUCKET,
-  ACL: 'public-read',
+  ACL: 'private'
+  // ACL: 'public-read',
 });
 
 export default class Controller {
@@ -92,6 +95,8 @@ export default class Controller {
     router.post('/get_page', this.getPage);
 
     router.post('/get_custom_route_page', this.getCustomPageRoute);
+
+    // router.post('/generate_presigned_url', this.generatePresignedUrl);
 
 
     app.use(prefix, router);
@@ -321,11 +326,11 @@ export default class Controller {
         localId, promo_route
       await Offer.findAll({ where: { id: user_id } }).then(async response => {
         // console.log("22222222222",response)
-         await response.map(async item => {
+        await response.map(async item => {
           console.log("resp", item.dataValues)
-          item.dataValues.custom_page_promo_ids =  item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
-          item.dataValues.custom_page_local_ids =  item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
-          item.dataValues.custom_page_promo_routes =  item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
+          item.dataValues.custom_page_promo_ids = item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
+          item.dataValues.custom_page_local_ids = item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
+          item.dataValues.custom_page_promo_routes = item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
 
         })
         // console.log("testing", response)
@@ -351,15 +356,15 @@ export default class Controller {
         localId, promo_route
       await Provider.findAll({ where: { id: user_id } }).then(async response => {
         // console.log("22222222222",response)
-         await response.map(async item => {
-          item.dataValues.custom_page_promo_ids =  item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
-          item.dataValues.custom_page_local_ids =  item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
-          item.dataValues.custom_page_promo_routes =  item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
+        await response.map(async item => {
+          item.dataValues.custom_page_promo_ids = item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
+          item.dataValues.custom_page_local_ids = item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
+          item.dataValues.custom_page_promo_routes = item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
         })
         // console.log("testing", response)
         await response.map(async item => {
           // console.log("qqqqqqqqqqqqqq", item)
-          let final = await Provider.update({custom_page_promo_ids: item.dataValues.custom_page_promo_ids, custom_page_local_ids: item.dataValues.custom_page_local_ids, custom_page_promo_routes: item.dataValues.custom_page_promo_routes }, { where: { id: item.id } })
+          let final = await Provider.update({ custom_page_promo_ids: item.dataValues.custom_page_promo_ids, custom_page_local_ids: item.dataValues.custom_page_local_ids, custom_page_promo_routes: item.dataValues.custom_page_promo_routes }, { where: { id: item.id } })
           return item
         })
         // console.log("finalaaa",response)
@@ -380,9 +385,9 @@ export default class Controller {
       await Pathway.findAll({ where: { id: user_id } }).then(async response => {
         // console.log("22222222222",response)
         await response.map(async item => {
-          item.dataValues.custom_page_promo_ids =  item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
-          item.dataValues.custom_page_local_ids =  item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
-          item.dataValues.custom_page_promo_routes =  item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
+          item.dataValues.custom_page_promo_ids = item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
+          item.dataValues.custom_page_local_ids = item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
+          item.dataValues.custom_page_promo_routes = item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
         })
         // console.log("testing", response)
         await response.map(async item => {
@@ -1070,6 +1075,7 @@ export default class Controller {
   }
 
   generatePresignedUrl(req, res) {
+    console.log("req.body",req.body)
     const { name } = req.body;
     if (!name) {
       return res.status(404).send({
@@ -1083,10 +1089,6 @@ export default class Controller {
   }
 
   async uploadallfile(req, res, next) {
-    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type, Accept,Authorization,Origin");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Credentials", true);
     var upload = await multer(
       {
         storage: Storage
@@ -1110,16 +1112,14 @@ export default class Controller {
           data: data1,
         })
       } else {
+        console.log(error)
         res.status(400).json({ error: "Something went wrong" });
       }
     });
   }
 
   async uploaMultipleFile(req, res, next) {
-    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type, Accept,Authorization,Origin");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Credentials", true);
+    // console.log("11111111111111", req)
     var upload = await multer(
       {
         storage: Storage

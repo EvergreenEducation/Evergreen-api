@@ -55,8 +55,8 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DOUBLE,
       },
       location_type:{
-        type: DataTypes.STRING,
-        defaultValue: "",
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       pay_unit: {
         type: DataTypes.STRING,

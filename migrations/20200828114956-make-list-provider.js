@@ -8,24 +8,24 @@ module.exports = {
       PROVIDER_TABLE,
       'location_type',
       {
-        type: Sequelize.STRING,
-        defaultValue: "",
+        type:Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
       },
     );
     await queryInterface.addColumn(
       PATHWAY_TABLE,
       'location_type',
       {
-        type: Sequelize.STRING,
-        defaultValue: "",
+        type:Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
       },
     );
     await queryInterface.addColumn(
       OFFER_TABLE,
       'location_type',
       {
-        type: Sequelize.STRING,
-        defaultValue: "",
+        type:Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
       },
     );
     await queryInterface.addColumn(
