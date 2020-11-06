@@ -15,8 +15,8 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       location_type:{
-        type: DataTypes.STRING,
-        defaultValue: "",
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       accreditation:{
         type: DataTypes.STRING,
