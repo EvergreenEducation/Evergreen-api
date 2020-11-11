@@ -7,7 +7,8 @@ const aws = require('aws-sdk');
 const s3Storage = require('multer-sharp-s3');
 const express = require('express');
 const router = express.Router();
-console.log("=======",process.env.S3_REGION)
+
+// console.log("=======", process.env.S3_REGION)
 // console.log("last",process.env.S3_ACCESS_KEY,process.env.S3_SECRET_ACCESS, process.env.S3_BUCKET)
 aws.config.update({
   accessKeyId: process.env.S3_ACCESS_KEY,
@@ -21,6 +22,34 @@ const Storage = s3Storage({
   ACL: 'private'
   // ACL: 'public-read',
 });
+
+const convertSignedUrl = (data) => {
+
+  // console.log("===========", data, process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_REGION, process.env.S3_BUCKET)
+  var AWS = require('aws-sdk');
+  const signedUrlExpireSeconds = 60 * 5 * 360;
+
+  AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET_ACCESS,
+    region: process.env.S3_REGION,
+  });
+
+  const s3 = new AWS.S3({
+    signatureVersion: 'v4'
+  })
+  const myKey = data.Location
+  const BUCKET = process.env.S3_BUCKET;
+
+
+  const newurl = s3.getSignedUrl('getObject', {
+    Bucket: BUCKET,
+    Key: data.key,
+    Expires: signedUrlExpireSeconds
+  });
+  console.log("newurl==========", newurl);
+  return newurl
+}
 
 export default class Controller {
 
@@ -1075,14 +1104,13 @@ export default class Controller {
   }
 
   generatePresignedUrl(req, res) {
-    console.log("req.body",req.body)
+    console.log("req.body", req.body)
     const { name } = req.body;
     if (!name) {
       return res.status(404).send({
         message: 'File name is empty.',
       });
     }
-
     return res.status(200).send({
       url: File.generatePresignedUrl(name),
     });
@@ -1098,8 +1126,10 @@ export default class Controller {
       console.log("req.files", req.files)
       let obj = {}
       let data1 = []
+      let newUrl
       req.files.map((item) => {
-        obj['original'] = item.Location,
+        newUrl = convertSignedUrl(item)
+        obj['original'] = newUrl,
           obj['name'] = item.originalname
         data1.push(obj);
         obj = {}
@@ -1129,11 +1159,44 @@ export default class Controller {
       console.log("req.files", req.files)
       let obj = {}
       let data1 = []
-      req.files.map((item) => {
-        obj['original'] = item.Location,
+      let newUrl
+      req.files.map(async (item) => {
+        newUrl = convertSignedUrl(item)
+        console.log("respssssssss", newUrl)
+        obj['original'] = newUrl,
           obj['name'] = item.originalname
         data1.push(obj);
         obj = {}
+      })
+      if (data1.length) {
+        res.status(200).json({
+          status: true,
+          message: 'File uploaded successfully',
+          data: data1,
+        })
+      } else {
+        res.status(400).json({ error: "Something went wrong" });
+      }
+    });
+  }
+
+  async uploadSingleFile(req, res, next) {
+    // console.log("req.files", req.files)
+    var upload = await multer(
+      {
+        storage: Storage
+      }
+    ).array('files', 1);
+    upload(req, res, function (err) {
+      const s3 = new aws.S3();
+      let newUrl = convertSignedUrl(req.files[0])
+      let obj = {}
+      let data1 = []
+      req.files.map((item) => {
+        obj['original'] = newUrl,
+        obj['name'] = item.originalname
+        data1.push(obj);
+        // obj = {}
       })
       console.log("dataaaaaaaaaa", data1)
       if (data1.length) {
@@ -1148,34 +1211,6 @@ export default class Controller {
     });
   }
 
-  async uploadSingleFile(req, res, next) {
-    var upload = await multer(
-      {
-        storage: Storage
-      }
-    ).array('files', 1);
-    upload(req, res, function (err) {
-      console.log("req.files", req.files)
-      let obj = {}
-      let data1 = []
-      req.files.map((item) => {
-        obj['original'] = item.Location,
-          obj['name'] = item.originalname
-        data1.push(obj);
-        obj = {}
-      })
-      console.log("dataaaaaaaaaa", data1)
-      if (data1.length) {
-        res.status(200).json({
-          status: true,
-          message: 'File uploaded successfully',
-          data: data1,
-        })
-      } else {
-        res.status(400).json({ error: "Something went wrong" });
-      }
-    });
-  }
 }
 
 
