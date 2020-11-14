@@ -37,7 +37,7 @@ module.exports = {
       },
     );
     await queryInterface.addColumn(OFFER_TABLE, 'main_image', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -46,7 +46,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(OFFER_TABLE, 'banner_image', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -55,7 +55,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(PROVIDER_TABLE, 'main_image', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -64,7 +64,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(PROVIDER_TABLE, 'banner_image', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -73,7 +73,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(PATHWAY_TABLE, 'main_image', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -82,7 +82,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(PATHWAY_TABLE, 'banner_image', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -91,7 +91,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(OFFER_TABLE, 'rubric_attachment', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -100,7 +100,7 @@ module.exports = {
       defaultValue: [],
     });
     await queryInterface.addColumn(PATHWAY_TABLE, 'rubric_attachment', {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: Sequelize.ARRAY(Sequelize.STRING(1000)),
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

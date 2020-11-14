@@ -23,7 +23,7 @@ module.exports = {
         defaultValue: [],
       },
       type: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1000),
       },
       created_at: {
         type: Sequelize.DATE,
