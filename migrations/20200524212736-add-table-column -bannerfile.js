@@ -10,7 +10,7 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             landing_image: {
-                type: Sequelize.ARRAY(Sequelize.STRING),
+                type: Sequelize.ARRAY(Sequelize.STRING(1000)),
                 defaultValue: [],
             },
             page_url_check: {
