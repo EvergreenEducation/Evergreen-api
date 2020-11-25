@@ -41,10 +41,9 @@ const convertSignedUrl = (data) => {
   const myKey = data.Location
   const BUCKET = process.env.S3_BUCKET;
 
-
   const newurl = s3.getSignedUrl('getObject', {
     Bucket: BUCKET,
-    Key: data.key,
+    Key: data.Key,
     Expires: signedUrlExpireSeconds
   });
   console.log("newurl==========", newurl);
