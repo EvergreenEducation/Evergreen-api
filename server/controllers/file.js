@@ -1,6 +1,6 @@
 import { File, Accedration, Offer, Pathway, Provider, DataField, Generic, Industry, Bannerfile, Setting } from '@/models';
 import { includes } from 'lodash';
-var multer = require('multer')
+var multer = require('multer');
 var fs = require('fs')
 var multerS3 = require('multer-s3')
 const aws = require('aws-sdk');
@@ -27,7 +27,7 @@ const convertSignedUrl = (data) => {
 
   // console.log("===========", data, process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_REGION, process.env.S3_BUCKET)
   var AWS = require('aws-sdk');
-  const signedUrlExpireSeconds = 60 * 5 * 360;
+  // const signedUrlExpireSeconds = 31536000;
 
   AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY,
@@ -44,8 +44,8 @@ const convertSignedUrl = (data) => {
   const newurl = s3.getSignedUrl('getObject', {
     Bucket: BUCKET,
     Key: data.Key,
-    Expires: signedUrlExpireSeconds
-  });
+    Expires: 86400,
+    });
   console.log("newurl==========", newurl);
   return newurl
 }
