@@ -27,7 +27,7 @@ const convertSignedUrl = (data) => {
 
   // console.log("===========", data, process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_REGION, process.env.S3_BUCKET)
   var AWS = require('aws-sdk');
-  // const signedUrlExpireSeconds = 31536000;
+  const signedUrlExpireSeconds = 60 * 5 * 360;
 
   AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY,
@@ -41,7 +41,16 @@ const convertSignedUrl = (data) => {
   const myKey = data.Location
   const BUCKET = process.env.S3_BUCKET;
 
-  const newurl = s3.getSignedUrl('getObject', {
+
+  // File.generatePresignedUrl = function generatePresignedUrl(name) {
+    let newurl = s3.getSignedUrl('putObject', {
+      Bucket: BUCKET,
+      Key: `${data.Key}`,
+      Expires: signedUrlExpireSeconds,
+    });
+  // };
+
+   newurl = s3.getSignedUrl('getObject', {
     Bucket: BUCKET,
     Key: data.Key,
     Expires: 86400,
