@@ -22,6 +22,78 @@ module.exports = {
     );
     await queryInterface.addColumn(
       PROVIDER_TABLE,
+      'custom_page_promo_ids',
+      {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      PROVIDER_TABLE,
+      'custom_page_local_ids',
+      {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      PROVIDER_TABLE,
+      'custom_page_promo_routes',
+      {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      PATHWAY_TABLE,
+      'custom_page_promo_ids',
+      {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      PATHWAY_TABLE,
+      'custom_page_local_ids',
+      {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      PATHWAY_TABLE,
+      'custom_page_promo_routes',
+      {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      OFFER_TABLE,
+      'custom_page_promo_ids',
+      {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      OFFER_TABLE,
+      'custom_page_local_ids',
+      {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      OFFER_TABLE,
+      'custom_page_promo_routes',
+      {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
+      },
+    );
+    await queryInterface.addColumn(
+      PROVIDER_TABLE,
       'main_promoted_by_user_ids',
       {
         type: Sequelize.ARRAY(Sequelize.INTEGER),

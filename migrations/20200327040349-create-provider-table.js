@@ -20,7 +20,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       type: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING((1000)),
       },
       learn_and_earn: {
         type: Sequelize.STRING,
@@ -38,12 +38,6 @@ module.exports = {
         type: Sequelize.STRING,
       },
       cost: {
-        type: Sequelize.DOUBLE,
-      },
-      pay: {
-        type: Sequelize.DOUBLE,
-      },
-      credit: {
         type: Sequelize.DOUBLE,
       },
       contact: {

@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       type: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1000),
       },
       earnings: {
         type: Sequelize.STRING,

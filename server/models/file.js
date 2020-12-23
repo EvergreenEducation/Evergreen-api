@@ -33,6 +33,15 @@ export default (sequelize, DataTypes) => {
     meta: {
       type: DataTypes.JSON,
     },
+    user_role:{
+      type: DataTypes.STRING
+    },
+    pdf_link: {
+      type: DataTypes.STRING
+    },
+    user_id: {
+      type: DataTypes.INTEGER
+    },
     uploaded_by_user_id: {
       type: DataTypes.INTEGER,
       references: { model: 'users', key: 'id' },

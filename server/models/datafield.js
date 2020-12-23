@@ -8,8 +8,23 @@ export default (sequelize, DataTypes) => {
       description: {
         type: DataTypes.TEXT,
       },
+      industry: {
+        type: DataTypes.STRING,
+      },
       type: {
         type: DataTypes.STRING,
+      },
+      is_check_topic: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      page_url_check: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      page_id: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
       },
     },
     {

@@ -14,6 +14,14 @@ export default (sequelize, DataTypes) => {
       location: {
         type: DataTypes.STRING,
       },
+      location_type:{
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      accreditation:{
+        type: DataTypes.STRING,
+        defaultValue: "",
+      },
       description: {
         type: DataTypes.TEXT,
       },
@@ -21,10 +29,18 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DOUBLE,
       },
       pay: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.STRING,
+      },
+      main_image: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      banner_image: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       credit: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.STRING,
       },
       contact: {
         type: DataTypes.JSON,
@@ -51,6 +67,18 @@ export default (sequelize, DataTypes) => {
       is_main_promo: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      custom_page_promo_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      custom_page_local_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      custom_page_promo_routes: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       local_promoted_by_user_ids: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),

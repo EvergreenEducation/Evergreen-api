@@ -31,6 +31,7 @@ export default (sequelize, DataTypes) => {
       },
       earnings: {
         type: DataTypes.STRING,
+        defaultValue: 0
       },
       length: {
         type: DataTypes.DOUBLE,
@@ -53,11 +54,24 @@ export default (sequelize, DataTypes) => {
       pay: {
         type: DataTypes.DOUBLE,
       },
+      location_type:{
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
       pay_unit: {
         type: DataTypes.STRING,
       },
       outlook: {
         type: DataTypes.STRING,
+        defaultValue: 0
+      },
+      main_image: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      banner_image: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       is_local_promo: {
         type: DataTypes.BOOLEAN,
@@ -66,6 +80,22 @@ export default (sequelize, DataTypes) => {
       is_main_promo: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      rubric_attachment: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
+      custom_page_promo_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      custom_page_local_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+      custom_page_promo_routes: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       local_promoted_by_user_ids: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
