@@ -20,10 +20,22 @@ module.exports = {
         type: Sequelize.STRING,
       },
       name: {
-        type: Sequelize.TEXT,
+        type: Sequelize.ARRAY(Sequelize.STRING(1000)),
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        defaultValue: [],
       },
       location: {
-        type: Sequelize.TEXT,
+        type: Sequelize.ARRAY(Sequelize.STRING(1000)),
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        defaultValue: [],
       },
       fileable_id: {
         type: Sequelize.INTEGER,

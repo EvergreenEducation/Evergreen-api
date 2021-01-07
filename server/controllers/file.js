@@ -2,24 +2,28 @@ import { File, Accedration, Offer, Pathway, Provider, DataField, Generic, Indust
 import { includes } from 'lodash';
 var multer = require('multer');
 var fs = require('fs')
-var multerS3 = require('multer-s3')
+// var multerS3 = require('multer-s3')
 const aws = require('aws-sdk');
 const s3Storage = require('multer-sharp-s3');
 const express = require('express');
 const router = express.Router();
 
 // console.log("=======", process.env.S3_REGION)
-// console.log("last",process.env.S3_ACCESS_KEY,process.env.S3_SECRET_ACCESS, process.env.S3_BUCKET)
-aws.config.update({
+console.log("last", process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_BUCKET, process.env.S3_REGION)
+// aws.config.update({
+//   accessKeyId: process.env.S3_ACCESS_KEY,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS,
+//   region: process.env.S3_REGION
+// })
+const s3 = new aws.S3({
   accessKeyId: process.env.S3_ACCESS_KEY,
   secretAccessKey: process.env.S3_SECRET_ACCESS,
   region: process.env.S3_REGION
 })
-const s3 = new aws.S3()
 const Storage = s3Storage({
   s3,
   Bucket: process.env.S3_BUCKET,
-  ACL: 'private'
+  ACL: 'private',
   // ACL: 'public-read',
 });
 
@@ -27,7 +31,7 @@ const convertSignedUrl = (data) => {
 
   // console.log("===========", data, process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_REGION, process.env.S3_BUCKET)
   var AWS = require('aws-sdk');
-  const signedUrlExpireSeconds = 60*60*24*365*10;
+  const signedUrlExpireSeconds = 60 * 5 * 360;
 
   AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY,
@@ -36,26 +40,25 @@ const convertSignedUrl = (data) => {
   });
 
   const s3 = new AWS.S3({
-    signatureVersion: 'v4'
+    signatureVersion: 'v2'
   })
   const myKey = data.Location
   const BUCKET = process.env.S3_BUCKET;
 
 
-    let newurl = s3.getSignedUrl('putObject', {
-      Bucket: BUCKET,
-      Key: `${data.Key}`,
-      // Expires: signedUrlExpireSeconds,
-    });
-
-   newurl = s3.getSignedUrl('getObject', {
+  let puturl = s3.getSignedUrl('putObject', {
     Bucket: BUCKET,
     Key: data.Key,
-    Expires: 604800,
-    });
-  console.log("newurl==========", newurl);
-  return newurl
+    Expires: signedUrlExpireSeconds,
+  });
+  //  let geturl = s3.getSignedUrl('getObject', {
+  //   Bucket: BUCKET,
+  //   Key:data.key
+  //   });
+  console.log("===========", data)
+  return data.Key
 }
+
 
 export default class Controller {
 
@@ -131,11 +134,26 @@ export default class Controller {
 
     router.post('/get_custom_route_page', this.getCustomPageRoute);
 
+    router.get('/get_image_url/:original/:name', this.getUrl);
+
     // router.post('/generate_presigned_url', this.generatePresignedUrl);
 
 
     app.use(prefix, router);
 
+  }
+
+  getUrl(req, res) {
+    let url = s3.getSignedUrl('getObject', {
+      Bucket: process.env.S3_BUCKET,
+      Key: `${req.params.original}`
+    });
+    return res.status(200).json({
+      status: true,
+      message: 'successful Getting Image Presigned URl',
+      data: url,
+      name: req.params.name
+    });
   }
 
   getCustomPageRoute(req, res) {
@@ -1134,8 +1152,9 @@ export default class Controller {
       let data1 = []
       let newUrl
       req.files.map((item) => {
-        newUrl = convertSignedUrl(item)
-        obj['original'] = newUrl,
+        key = convertSignedUrl(item)
+        console.log("respssssssss", key)
+        obj['original'] = key,
           obj['name'] = item.originalname
         data1.push(obj);
         obj = {}
@@ -1165,11 +1184,11 @@ export default class Controller {
       console.log("req.files", req.files)
       let obj = {}
       let data1 = []
-      let newUrl
+      let key
       req.files.map(async (item) => {
-        newUrl = convertSignedUrl(item)
-        console.log("respssssssss", newUrl)
-        obj['original'] = newUrl,
+        key = convertSignedUrl(item)
+        console.log("respssssssss", key)
+        obj['original'] = key,
           obj['name'] = item.originalname
         data1.push(obj);
         obj = {}
@@ -1198,9 +1217,12 @@ export default class Controller {
       let newUrl = convertSignedUrl(req.files[0])
       let obj = {}
       let data1 = []
+      let key
       req.files.map((item) => {
-        obj['original'] = newUrl,
-        obj['name'] = item.originalname
+        key = convertSignedUrl(item)
+        console.log("respssssssss", key)
+        obj['original'] = key,
+          obj['name'] = item.originalname
         data1.push(obj);
         // obj = {}
       })

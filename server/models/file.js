@@ -19,10 +19,12 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     name: {
-      type: DataTypes.TEXT,
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
     },
     location: {
-      type: DataTypes.TEXT,
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
     },
     fileable_id: {
       type: DataTypes.INTEGER,
@@ -33,7 +35,7 @@ export default (sequelize, DataTypes) => {
     meta: {
       type: DataTypes.JSON,
     },
-    user_role:{
+    user_role: {
       type: DataTypes.STRING
     },
     pdf_link: {
@@ -50,8 +52,8 @@ export default (sequelize, DataTypes) => {
     file_link: {
       type: DataTypes.VIRTUAL,
       get: function () {
-         return File.getUrl(this.getDataValue('location'));
-       },
+        return File.getUrl(this.getDataValue('location'));
+      },
     },
   });
 
@@ -60,6 +62,7 @@ export default (sequelize, DataTypes) => {
   };
 
   File.generatePresignedUrl = function generatePresignedUrl(name) {
+    console.log("nameeeeee",name)
     return s3.getSignedUrl('putObject', {
       Bucket: BUCKET,
       Key: `${name}`,
@@ -68,6 +71,7 @@ export default (sequelize, DataTypes) => {
   };
 
   File.getUrl = function getUrl(location) {
+    console.log("locaa",location)
     return s3.getSignedUrl('getObject', {
       Bucket: BUCKET,
       Key: `${location}`,
