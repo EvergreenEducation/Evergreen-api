@@ -1,4 +1,10 @@
+.package-lock.json
+# production
+
 node_modules
 dist
 .DS_Store
-
+.env
+config
+libs
+./model/index
