@@ -2,24 +2,28 @@ import { File, Accedration, Offer, Pathway, Provider, DataField, Generic, Indust
 import { includes } from 'lodash';
 var multer = require('multer');
 var fs = require('fs')
-var multerS3 = require('multer-s3')
+// var multerS3 = require('multer-s3')
 const aws = require('aws-sdk');
 const s3Storage = require('multer-sharp-s3');
 const express = require('express');
 const router = express.Router();
 
 // console.log("=======", process.env.S3_REGION)
-// console.log("last",process.env.S3_ACCESS_KEY,process.env.S3_SECRET_ACCESS, process.env.S3_BUCKET)
-aws.config.update({
+// console.log("last", process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_BUCKET, process.env.S3_REGION)
+// aws.config.update({
+//   accessKeyId: process.env.S3_ACCESS_KEY,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS,
+//   region: process.env.S3_REGION
+// })
+const s3 = new aws.S3({
   accessKeyId: process.env.S3_ACCESS_KEY,
   secretAccessKey: process.env.S3_SECRET_ACCESS,
   region: process.env.S3_REGION
 })
-const s3 = new aws.S3()
 const Storage = s3Storage({
   s3,
   Bucket: process.env.S3_BUCKET,
-  ACL: 'private'
+  ACL: 'private',
   // ACL: 'public-read',
 });
 
@@ -27,7 +31,7 @@ const convertSignedUrl = (data) => {
 
   // console.log("===========", data, process.env.S3_ACCESS_KEY, process.env.S3_SECRET_ACCESS, process.env.S3_REGION, process.env.S3_BUCKET)
   var AWS = require('aws-sdk');
-  const signedUrlExpireSeconds = 60*60*24*365*10;
+  const signedUrlExpireSeconds = 60 * 5 * 360;
 
   AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY,
@@ -36,26 +40,25 @@ const convertSignedUrl = (data) => {
   });
 
   const s3 = new AWS.S3({
-    signatureVersion: 'v4'
+    signatureVersion: 'v2'
   })
   const myKey = data.Location
   const BUCKET = process.env.S3_BUCKET;
 
 
-    let newurl = s3.getSignedUrl('putObject', {
-      Bucket: BUCKET,
-      Key: `${data.Key}`,
-      // Expires: signedUrlExpireSeconds,
-    });
-
-   newurl = s3.getSignedUrl('getObject', {
+  let puturl = s3.getSignedUrl('putObject', {
     Bucket: BUCKET,
     Key: data.Key,
-    Expires: 604800,
-    });
-  console.log("newurl==========", newurl);
-  return newurl
+    Expires: signedUrlExpireSeconds,
+  });
+  //  let geturl = s3.getSignedUrl('getObject', {
+  //   Bucket: BUCKET,
+  //   Key:data.key
+  //   });
+  // console.log("===========", data)
+  return data.Key
 }
+
 
 export default class Controller {
 
@@ -131,11 +134,26 @@ export default class Controller {
 
     router.post('/get_custom_route_page', this.getCustomPageRoute);
 
+    router.get('/get_image_url/:original/:name', this.getUrl);
+
     // router.post('/generate_presigned_url', this.generatePresignedUrl);
 
 
     app.use(prefix, router);
 
+  }
+
+  getUrl(req, res) {
+    let url = s3.getSignedUrl('getObject', {
+      Bucket: process.env.S3_BUCKET,
+      Key: `${req.params.original}`
+    });
+    return res.status(200).json({
+      status: true,
+      message: 'successful Getting Image Presigned URl',
+      data: url,
+      name: req.params.name
+    });
   }
 
   getCustomPageRoute(req, res) {
@@ -167,7 +185,7 @@ export default class Controller {
 
   addPage(req, res) {
     const { page_route, user_role, user_id } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!page_route) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -218,7 +236,7 @@ export default class Controller {
   }
 
   deleteTopic(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
     const page_url_check = req.body.page_url_check
 
@@ -243,7 +261,7 @@ export default class Controller {
   }
 
   updateTopic(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
     const page_url_check = req.body.page_url_check
 
@@ -268,7 +286,7 @@ export default class Controller {
   }
 
   async updateTopicRoute(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
     const page_url_check = req.body.page_url_check
     const page_id = req.body.page_id
@@ -307,7 +325,7 @@ export default class Controller {
   }
 
   async deleteTopicRoute(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
     const page_url_check = req.body.page_url_check
     const page_id = req.body.page_id
@@ -320,7 +338,7 @@ export default class Controller {
       let idData
       await DataField.findAll({ where: { id: user_id } }).then(async response => {
         await response.map(async item => {
-          console.log("resp", item.dataValues)
+          // console.log("resp", item.dataValues)
           item.dataValues.page_id = item.dataValues.page_id.filter(val => !page_id.includes(val));
         })
         await response.map(async item => {
@@ -344,7 +362,7 @@ export default class Controller {
   }
 
   async deletePromoRoute(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const type = req.body.type
     const user_id = req.body.user_id;
     const custom_page_promo_ids = req.body.custom_page_promo_ids
@@ -362,7 +380,7 @@ export default class Controller {
       await Offer.findAll({ where: { id: user_id } }).then(async response => {
         // console.log("22222222222",response)
         await response.map(async item => {
-          console.log("resp", item.dataValues)
+          // console.log("resp", item.dataValues)
           item.dataValues.custom_page_promo_ids = item.dataValues.custom_page_promo_ids.filter(val => !custom_page_promo_ids.includes(val));
           item.dataValues.custom_page_local_ids = item.dataValues.custom_page_local_ids.filter(val => !custom_page_local_ids.includes(val));
           item.dataValues.custom_page_promo_routes = item.dataValues.custom_page_promo_routes.filter(val => !custom_page_promo_routes.includes(val));
@@ -370,7 +388,7 @@ export default class Controller {
         })
         // console.log("testing", response)
         await response.map(async item => {
-          console.log("qqqqqqqqqqqqqq", item.dataValues)
+          // console.log("qqqqqqqqqqqqqq", item.dataValues)
           let final = await Offer.update({ custom_page_promo_ids: item.dataValues.custom_page_promo_ids, custom_page_local_ids: item.dataValues.custom_page_local_ids, custom_page_promo_routes: item.dataValues.custom_page_promo_routes }, { where: { id: item.id } })
           return item
         })
@@ -446,7 +464,7 @@ export default class Controller {
   }
 
   async updatePromoRoute(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const type = req.body.type
     const user_id = req.body.user_id;
     const custom_page_promo_ids = req.body.custom_page_promo_ids
@@ -469,7 +487,7 @@ export default class Controller {
           promo_route = await custom_page_promo_routes !== null && !item.dataValues.custom_page_promo_routes.includes(custom_page_promo_routes) && item.dataValues.custom_page_promo_routes.push(custom_page_promo_routes)
           return item
         })
-        console.log("testing", response)
+        // console.log("testing", response)
         await response.map(async item => {
           // console.log("qqqqqqqqqqqqqq", item)
           let final = await Offer.update({ custom_page_promo_ids: item.custom_page_promo_ids, custom_page_local_ids: item.custom_page_local_ids, custom_page_promo_routes: item.custom_page_promo_routes }, { where: { id: item.id } })
@@ -498,7 +516,7 @@ export default class Controller {
           promo_route = await custom_page_promo_routes !== null && !item.dataValues.custom_page_promo_routes.includes(custom_page_promo_routes) && item.dataValues.custom_page_promo_routes.push(custom_page_promo_routes)
           return item
         })
-        console.log("testing", response)
+        // console.log("testing", response)
         await response.map(async item => {
           // console.log("qqqqqqqqqqqqqq", item)
           let final = await Provider.update({ custom_page_promo_ids: item.custom_page_promo_ids, custom_page_local_ids: item.custom_page_local_ids, custom_page_promo_routes: item.custom_page_promo_routes }, { where: { id: item.id } })
@@ -527,7 +545,7 @@ export default class Controller {
           promo_route = await custom_page_promo_routes !== null && !item.dataValues.custom_page_promo_routes.includes(custom_page_promo_routes) && item.dataValues.custom_page_promo_routes.push(custom_page_promo_routes)
           return item
         })
-        console.log("testing", response)
+        // console.log("testing", response)
         await response.map(async item => {
           // console.log("qqqqqqqqqqqqqq", item)
           let final = await Pathway.update({ custom_page_promo_ids: item.custom_page_promo_ids, custom_page_local_ids: item.custom_page_local_ids, custom_page_promo_routes: item.custom_page_promo_routes }, { where: { id: item.id } })
@@ -549,7 +567,7 @@ export default class Controller {
   }
 
   deletePathway(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
 
     if (!user_id) {
@@ -562,7 +580,7 @@ export default class Controller {
           id: user_id,
         },
       }).then(response => {
-        console.log("daaaa", response)
+        // console.log("daaaa", response)
         return res.status(200).json({
           status: true,
           message: 'Pathway data deleted succesfully',
@@ -578,7 +596,7 @@ export default class Controller {
   }
 
   deleteProvider(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
 
     if (!user_id) {
@@ -591,7 +609,7 @@ export default class Controller {
           id: user_id,
         },
       }).then(response => {
-        console.log("data", response)
+        // console.log("data", response)
         return res.status(200).json({
           status: true,
           message: 'Provider data deleted succesfully',
@@ -607,7 +625,7 @@ export default class Controller {
   }
 
   deleteOffer(req, res) {
-    console.log("-------------", req.body)
+    // console.log("-------------", req.body)
     const user_id = req.body.user_id;
 
     if (!user_id) {
@@ -635,7 +653,7 @@ export default class Controller {
   }
 
   getProvider(req, res) {
-    console.log("-------------", req.params)
+    // console.log("-------------", req.params)
     const user_id = req.params.id;
 
     if (!user_id) {
@@ -663,7 +681,7 @@ export default class Controller {
   }
 
   getImagesData(req, res) {
-    console.log("-------------", req.params)
+    // console.log("-------------", req.params)
     const user_id = req.params.id;
 
     if (!user_id) {
@@ -692,20 +710,20 @@ export default class Controller {
 
   async offerdeletePdf(req, res) {
     const { image, user_id } = req.body
-    console.log("======", req.body)
+    // console.log("======", req.body)
     await Offer.findOne({ where: { id: user_id } }).then(async resp => {
       if (resp.dataValues.rubric_attachment) {
         let Arr = []
         await resp.dataValues.rubric_attachment.map(async (item, i) => {
           let newData = JSON.parse(item)
           await Arr.push(newData)
-          console.log("newwwwwwww", newData.original, image)
+          // console.log("newwwwwwww", newData.original, image)
           if (newData.original === image) {
-            console.log(i, "1111111111")
+            // console.log(i, "1111111111")
             Arr = await Arr.splice(i, 1)
           }
         })
-        console.log("11111111111111============", Arr)
+        // console.log("11111111111111============", Arr)
         await Offer.update({ rubric_attachment: Arr }, {
           where: {
             id: user_id,
@@ -713,7 +731,7 @@ export default class Controller {
           returning: true,
           plain: true
         }).then(response => {
-          console.log("responseeeeeee", response)
+          // console.log("responseeeeeee", response)
           return res.status(200).json({
             status: true,
             message: 'Data Update succesffuly',
@@ -736,21 +754,21 @@ export default class Controller {
 
   async deletePdf(req, res) {
     const { image, user_id } = req.body
-    console.log("======", req.body)
+    // console.log("======", req.body)
     await Pathway.findOne({ where: { id: user_id } }).then(async resp => {
       if (resp.dataValues.rubric_attachment) {
-        console.log("resp.dataValues.rubric_attachment", resp.dataValues.rubric_attachment)
+        // console.log("resp.dataValues.rubric_attachment", resp.dataValues.rubric_attachment)
         let Arr = []
         await resp.dataValues.rubric_attachment.map(async (item, i) => {
           let newData = JSON.parse(item)
           await Arr.push(newData)
-          console.log("newwwwwwww", newData.original, image)
+          // console.log("newwwwwwww", newData.original, image)
           if (newData.original === image) {
-            console.log(i, "1111111111")
+            // console.log(i, "1111111111")
             Arr = await Arr.splice(i, 1)
           }
         })
-        console.log("11111111111111============", Arr)
+        // console.log("11111111111111============", Arr)
         await Pathway.update({ rubric_attachment: Arr }, {
           where: {
             id: user_id,
@@ -758,7 +776,7 @@ export default class Controller {
           returning: true,
           plain: true
         }).then(response => {
-          console.log("responseeeeeee", response)
+          // console.log("responseeeeeee", response)
           return res.status(200).json({
             status: true,
             message: 'Data Update succesffuly',
@@ -780,7 +798,7 @@ export default class Controller {
   }
 
   getGeneric(req, res) {
-    console.log("-------------", req)
+    // console.log("-------------", req)
     Offer.findAll({
       where: {
         is_generic: true,
@@ -801,7 +819,7 @@ export default class Controller {
 
   updateAdminShowdata(req, res) {
     const { user_id, is_display } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!user_id) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -830,7 +848,7 @@ export default class Controller {
 
   addIndustry(req, res) {
     const { name, user_role, user_id } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!name) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -852,7 +870,7 @@ export default class Controller {
 
   addAccedration(req, res) {
     const { name, user_role, user_id } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!name) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -875,7 +893,7 @@ export default class Controller {
 
   addGenric(req, res) {
     const { name, user_role, user_id } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!name) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -898,7 +916,7 @@ export default class Controller {
 
   addBannerFiles(req, res) {
     const { landing_image, user_role, user_id, image_url, page_url_check, page_id } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!landing_image) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -922,7 +940,7 @@ export default class Controller {
   }
 
   getBannerFiles(req, res) {
-    console.log("-------------")
+    // console.log("-------------")
     Bannerfile.findAll({}).then(response => {
       return res.status(200).json({
         status: true,
@@ -1059,7 +1077,7 @@ export default class Controller {
 
   addPdfData(req, res) {
     const { pdf_link, user_id, user_role } = req.body
-    console.log("---------", req.body)
+    // console.log("---------", req.body)
     if (!pdf_link) {
       return res.status(404).send({
         message: 'Please send the valid params',
@@ -1080,7 +1098,7 @@ export default class Controller {
   }
 
   getPdfData(req, res) {
-    console.log("-------------", req.params)
+    // console.log("-------------", req.params)
     const user_id = req.params.user_id;
     const user_role = req.params.user_role;
 
@@ -1110,7 +1128,7 @@ export default class Controller {
   }
 
   generatePresignedUrl(req, res) {
-    console.log("req.body", req.body)
+    // console.log("req.body", req.body)
     const { name } = req.body;
     if (!name) {
       return res.status(404).send({
@@ -1129,18 +1147,19 @@ export default class Controller {
       }
     ).array('files', 10);
     upload(req, res, function (err) {
-      console.log("req.files", req.files)
+      // console.log("req.files", req.files)
       let obj = {}
       let data1 = []
       let newUrl
       req.files.map((item) => {
-        newUrl = convertSignedUrl(item)
-        obj['original'] = newUrl,
+        key = convertSignedUrl(item)
+        // console.log("respssssssss", key)
+        obj['original'] = key,
           obj['name'] = item.originalname
         data1.push(obj);
         obj = {}
       })
-      console.log("dataaaaaaaaaa", data1)
+      // console.log("dataaaaaaaaaa", data1)
       if (data1.length) {
         res.status(200).json({
           status: true,
@@ -1162,14 +1181,14 @@ export default class Controller {
       }
     ).array('files', 10);
     upload(req, res, function (err) {
-      console.log("req.files", req.files)
+      // console.log("req.files", req.files)
       let obj = {}
       let data1 = []
-      let newUrl
+      let key
       req.files.map(async (item) => {
-        newUrl = convertSignedUrl(item)
-        console.log("respssssssss", newUrl)
-        obj['original'] = newUrl,
+        key = convertSignedUrl(item)
+        // console.log("respssssssss", key)
+        obj['original'] = key,
           obj['name'] = item.originalname
         data1.push(obj);
         obj = {}
@@ -1198,13 +1217,16 @@ export default class Controller {
       let newUrl = convertSignedUrl(req.files[0])
       let obj = {}
       let data1 = []
+      let key
       req.files.map((item) => {
-        obj['original'] = newUrl,
-        obj['name'] = item.originalname
+        key = convertSignedUrl(item)
+        // console.log("respssssssss", key)
+        obj['original'] = key,
+          obj['name'] = item.originalname
         data1.push(obj);
         // obj = {}
       })
-      console.log("dataaaaaaaaaa", data1)
+      // console.log("dataaaaaaaaaa", data1)
       if (data1.length) {
         res.status(200).json({
           status: true,
