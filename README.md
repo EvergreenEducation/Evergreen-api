@@ -1,3 +1,8 @@
+# Current Deployment
+Development branch is deployed to: 
+client - evergreeneducation.netlify.app
+api - evergreentest.herokuapp.com
+
 # app
 
 Evergreen API
