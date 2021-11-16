@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
-    "aws-sdk": "^2.654.0",
+    "aws-sdk": "^2.814.0",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "connect-session-sequelize": "^6.1.1",
