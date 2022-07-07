@@ -30,7 +30,7 @@
     "finale-rest": "^1.1.1",
     "inflection": "^1.12.0",
     "lodash": "^4.17.21",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
     "passport-auth0": "^1.3.2",
